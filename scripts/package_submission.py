@@ -35,6 +35,7 @@ INCLUDE_FILES = [
     "Dockerfile",
     ".env.example",
     ".gitignore",
+    "pytest.ini",
 ]
 
 SUBMISSION_README = """# Kuku AI Generalist — Problem 1 submission
