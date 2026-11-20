@@ -53,6 +53,14 @@ Re-rank existing candidates without re-parsing:
 .\.venv\Scripts\python.exe -m src.cli rank
 ```
 
+By default the generator is recall-oriented and keeps weak candidates so the
+quality-check report has something honest to inspect. Use `--min-score 6.5`
+to keep only clips above the internal Good threshold:
+
+```powershell
+.\.venv\Scripts\python.exe -m src.cli run --zip data/input/screenplays.zip --provider local --min-score 6.5 --force
+```
+
 Run the tests:
 
 ```powershell
