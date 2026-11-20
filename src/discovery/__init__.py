@@ -1,0 +1,1 @@
+"""Promo discovery and candidate generation."""

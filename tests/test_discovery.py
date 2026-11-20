@@ -1,0 +1,166 @@
+
+from src.models import Episode, Scene, Segment
+
+from src.discovery.window_generator import (
+    generate_candidate_windows,
+    get_signal_score,
+)
+
+from src.discovery.promo_discovery import (
+    fallback_evaluation,
+    create_candidate,
+)
+
+
+def make_test_episode():
+
+    scene = Scene(
+        scene_id="E001_S01",
+        episode_number=1,
+        scene_heading="INT. ROOM - NIGHT",
+        start_timestamp="00:00.00",
+        end_timestamp="01:00.00",
+        start_seconds=0,
+        end_seconds=60,
+    )
+
+    segments = [
+        Segment(
+            segment_id="SEG001",
+            episode_number=1,
+            scene_id="E001_S01",
+            segment_type="DIALOGUE",
+            speaker="JULIANA",
+            start_timestamp="00:00.00",
+            end_timestamp="00:08.00",
+            start_seconds=0,
+            end_seconds=8,
+            content="Why did you betray me?",
+            source_file="episode-001.txt",
+        ),
+        Segment(
+            segment_id="SEG002",
+            episode_number=1,
+            scene_id="E001_S01",
+            segment_type="ACTION",
+            start_timestamp="00:08.00",
+            end_timestamp="00:20.00",
+            start_seconds=8,
+            end_seconds=20,
+            content="Juliana discovers the secret.",
+            source_file="episode-001.txt",
+        ),
+        Segment(
+            segment_id="SEG003",
+            episode_number=1,
+            scene_id="E001_S01",
+            segment_type="DIALOGUE",
+            speaker="DUKE",
+            start_timestamp="00:20.00",
+            end_timestamp="00:30.00",
+            start_seconds=20,
+            end_seconds=30,
+            content="You don't know the truth.",
+            source_file="episode-001.txt",
+        ),
+    ]
+
+    return Episode(
+        episode_number=1,
+        source_file="episode-001.txt",
+        logline="A secret changes everything.",
+        continuity_notes="Test continuity.",
+        scenes=[scene],
+        segments=segments,
+        duration_seconds=60,
+        raw_text="Test screenplay",
+    )
+
+
+def test_signal_detection():
+
+    episode = make_test_episode()
+
+    score, categories = get_signal_score(
+        episode.segments
+    )
+
+    assert score > 0
+    assert len(categories) > 0
+
+
+def test_window_duration():
+
+    episode = make_test_episode()
+
+    windows = generate_candidate_windows(
+        episode,
+        max_windows=5,
+    )
+
+    assert len(windows) > 0
+
+    for window in windows:
+
+        assert 20 <= window["duration_seconds"] <= 60
+
+        assert window["end_seconds"] <= 60
+
+
+def test_window_has_source_segments():
+
+    episode = make_test_episode()
+
+    windows = generate_candidate_windows(episode)
+
+    for window in windows:
+
+        assert len(window["segments"]) > 0
+
+        assert all(
+            segment.segment_id
+            for segment in window["segments"]
+        )
+
+
+def test_fallback_evaluation():
+
+    episode = make_test_episode()
+
+    windows = generate_candidate_windows(episode)
+
+    result = fallback_evaluation(windows[0])
+
+    assert result["analysis_mode"] == (
+        "DETERMINISTIC_FALLBACK"
+    )
+
+    assert result["dialogue"]
+
+
+def test_candidate_uses_python_timestamps():
+
+    episode = make_test_episode()
+
+    windows = generate_candidate_windows(episode)
+
+    window = windows[0]
+
+    evaluation = fallback_evaluation(window)
+
+    candidate, metadata = create_candidate(
+        episode,
+        window,
+        evaluation,
+        "DETERMINISTIC_FALLBACK",
+    )
+
+    assert candidate.start_seconds == window["start_seconds"]
+
+    assert candidate.end_seconds == window["end_seconds"]
+
+    assert candidate.source_segment_ids
+
+    assert metadata["analysis_mode"] == (
+        "DETERMINISTIC_FALLBACK"
+    )

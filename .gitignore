@@ -1,0 +1,16 @@
+
+.env
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.streamlit/secrets.toml
+
+data/input/*
+data/processed/*
+data/cache/*
+data/exports/*
+!data/input/.gitkeep
+!data/processed/.gitkeep
+!data/cache/.gitkeep
+!data/exports/.gitkeep
