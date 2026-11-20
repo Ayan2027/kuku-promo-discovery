@@ -24,6 +24,9 @@ WEIGHTS = {
     "promotional_relevance": 0.10,
 }
 
+# The brief requires the hook to land in the first three seconds of the clip.
+HOOK_WINDOW_SECONDS = 3.0
+
 CONFLICT_WORDS = {
     "betray", "betrayal", "betrayed", "liar", "lie", "lied", "revenge",
     "kill", "murder", "danger", "threat", "hate", "fight", "enemy",
@@ -194,11 +197,27 @@ def _select_segments(
     return selected
 
 
-def _pick_first_beat(selected: list[Any], start: float) -> Any | None:
-    """Prefer a dialogue/action beat that begins in the first 5 seconds."""
+def first_beat_start(selected: list[Any]) -> float | None:
+    """Start time of the earliest dialogue/action beat, if any."""
+
+    starts = [
+        float(_get(s, "start_seconds", 0))
+        for s in selected
+        if str(_get(s, "segment_type", "")).upper() in ("DIALOGUE", "ACTION")
+    ]
+    return min(starts) if starts else None
+
+
+def _pick_first_beat(
+    selected: list[Any],
+    start: float,
+    window: float = HOOK_WINDOW_SECONDS,
+) -> Any | None:
+    """Prefer a dialogue/action beat that begins within the hook window."""
+
     early = [
         s for s in selected
-        if float(_get(s, "start_seconds", 0)) <= start + 5.0
+        if float(_get(s, "start_seconds", 0)) <= start + window
     ]
     for preferred in ("DIALOGUE", "ACTION"):
         for segment in early:
@@ -484,7 +503,24 @@ def build_why_it_works(
     duration: float,
     categories: list[str] | None = None,
 ) -> str:
-    """A specific, evidence-grounded one-line explanation."""
+    """A single, specific sentence explaining why the cut should work."""
+
+    opening = _clean(opening_hook)[:70] or "a strong opening beat"
+    return (
+        f"Opens on a {hook_type} hook (\"{opening}\") and cuts at "
+        f"{duration:.0f}s on {cliffhanger_type} tension."
+    )
+
+
+def build_promotional_justification(
+    opening_hook: str,
+    ending_cliffhanger: str,
+    hook_type: str,
+    cliffhanger_type: str,
+    duration: float,
+    categories: list[str] | None = None,
+) -> str:
+    """The longer, evidence-grounded explanation kept alongside the one-liner."""
 
     opening = _clean(opening_hook)[:120] or "a strong opening beat"
     ending = _clean(ending_cliffhanger)[:120] or "an unresolved final beat"

@@ -20,7 +20,11 @@ from src.ai.prompts import build_episode_prompt
 from src.config import settings
 from src.discovery.window_generator import generate_candidate_windows
 from src.models import PromoCandidate, SourceSegment
-from src.scoring.scorer import build_why_it_works
+from src.scoring.scorer import (
+    build_promotional_justification,
+    build_why_it_works,
+)
+from src.utils.timestamps import seconds_to_timestamp
 
 
 def save_json(data, path):
@@ -50,21 +54,47 @@ def extract_characters(segments):
     })
 
 
-def _source_segments(segments) -> list[SourceSegment]:
-    return [
-        SourceSegment(
+def _clip(value: float, lower: float, upper: float) -> float:
+    return round(max(lower, min(upper, value)), 2)
+
+
+def _source_segments(
+    segments,
+    start: float | None = None,
+    end: float | None = None,
+) -> list[SourceSegment]:
+    """Ordered source segments clipped to the promo window.
+
+    Screenplay segments overlap each other and can extend past a clip's cut
+    points. The exported spans are clipped to ``[start, end]`` so the ordered
+    segment timeline exactly covers the stated clip, while ``segment_id``
+    still identifies the original screenplay segment.
+    """
+
+    ordered = sorted(segments, key=lambda s: s.start_seconds)
+    if start is None:
+        start = min(float(s.start_seconds) for s in ordered)
+    if end is None:
+        end = max(float(s.end_seconds) for s in ordered)
+
+    clipped: list[SourceSegment] = []
+    for segment in ordered:
+        seg_start = _clip(float(segment.start_seconds), start, end)
+        seg_end = _clip(float(segment.end_seconds), start, end)
+        if seg_end <= seg_start:
+            continue
+        clipped.append(SourceSegment(
             segment_id=segment.segment_id,
             scene_id=segment.scene_id,
             segment_type=segment.segment_type,
             speaker=segment.speaker,
-            start_timestamp=segment.start_timestamp,
-            end_timestamp=segment.end_timestamp,
-            start_seconds=segment.start_seconds,
-            end_seconds=segment.end_seconds,
+            start_timestamp=seconds_to_timestamp(seg_start),
+            end_timestamp=seconds_to_timestamp(seg_end),
+            start_seconds=seg_start,
+            end_seconds=seg_end,
             content=segment.content,
-        )
-        for segment in sorted(segments, key=lambda s: s.start_seconds)
-    ]
+        ))
+    return clipped
 
 
 def _valid_scores(scores: dict | None) -> bool:
@@ -121,6 +151,14 @@ def fallback_evaluation(window):
         duration=duration,
         categories=categories,
     )
+    justification = build_promotional_justification(
+        opening_hook=opening_hook,
+        ending_cliffhanger=ending,
+        hook_type=editorial.get("hook_type", "unknown"),
+        cliffhanger_type=editorial.get("cliffhanger_type", "unknown"),
+        duration=duration,
+        categories=categories,
+    )
 
     return {
         "window_id": window["window_id"],
@@ -134,7 +172,7 @@ def fallback_evaluation(window):
         "main_dramatic_moment": main_moment,
         "ending_cliffhanger_or_payoff": ending,
         "emotional_category": category,
-        "promotional_justification": why,
+        "promotional_justification": justification,
         "why_it_works": why,
         "hook_type": editorial.get("hook_type", "unknown"),
         "cliffhanger_type": editorial.get("cliffhanger_type", "unknown"),
@@ -195,11 +233,12 @@ def create_candidate(episode, window, evaluation, analysis_mode):
     if not _valid_scores(scores):
         scores = window.get("score_breakdown", {})
 
-    why = str(
-        evaluation.get("why_it_works")
-        or evaluation.get("promotional_justification")
-        or ""
+    why = str(evaluation.get("why_it_works") or "")
+    justification = str(
+        evaluation.get("promotional_justification") or why
     )
+    if not why:
+        why = justification
 
     candidate = PromoCandidate(
         # window_id is already W0001; add the episode prefix exactly once.
@@ -216,12 +255,16 @@ def create_candidate(episode, window, evaluation, analysis_mode):
         ending_cliffhanger_or_payoff=str(
             evaluation.get("ending_cliffhanger_or_payoff", "")
         ),
-        promotional_justification=why,
+        promotional_justification=justification,
         dialogue=dialogue,
         characters=characters,
         emotional_category=str(evaluation.get("emotional_category", "Drama")),
         source_segment_ids=source_ids,
-        source_segments=_source_segments(segments),
+        source_segments=_source_segments(
+            segments,
+            start=float(window["start_seconds"]),
+            end=float(window["end_seconds"]),
+        ),
         hook_type=str(evaluation.get("hook_type", "unknown")),
         cliffhanger_type=str(evaluation.get("cliffhanger_type", "unknown")),
         why_it_works=why,

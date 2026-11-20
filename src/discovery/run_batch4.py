@@ -9,6 +9,7 @@ from pathlib import Path
 from src.config import settings
 from src.discovery.ranker import rank_and_validate
 from src.exports.promo_exporter import export_promos, export_rejected
+from src.quality.output_audit import build_output_audit, write_output_audit
 
 
 def load_json(path):
@@ -49,6 +50,43 @@ def _scene_count(candidate: dict) -> int:
         for segment in candidate.get("source_segments") or []
         if segment.get("scene_id")
     })
+
+
+def _hook_offset(candidate: dict) -> float | None:
+    """Seconds from the clip start to its opening hook, if it can be located."""
+
+    hook = str(candidate.get("opening_hook", "")).strip()
+    segments = candidate.get("source_segments") or []
+
+    if hook:
+        for segment in segments:
+            speaker = str(segment.get("speaker") or "").strip()
+            content = str(segment.get("content", "")).replace(
+                "\n", " "
+            ).strip()
+            label = f"{speaker}: {content}" if speaker else content
+            if label.strip() == hook:
+                return round(
+                    float(segment.get("start_seconds", 0))
+                    - float(candidate.get("start_seconds", 0)),
+                    2,
+                )
+
+    beats = [
+        segment for segment in segments
+        if str(segment.get("segment_type", "")).upper()
+        in ("DIALOGUE", "ACTION")
+    ]
+    if not beats:
+        return None
+    first = min(
+        beats, key=lambda s: float(s.get("start_seconds", 0))
+    )
+    return round(
+        float(first.get("start_seconds", 0))
+        - float(candidate.get("start_seconds", 0)),
+        2,
+    )
 
 
 def _bad_pick_examples(candidates: list[dict], limit: int = 5) -> list[dict]:
@@ -106,6 +144,12 @@ def build_quality_check(
     mid_dialogue = sum(_ends_mid_dialogue(c) for c in ranked)
     scene_crossings = sum(_scene_count(c) > 1 for c in ranked)
     short_hooks = sum(len(hook.split()) <= 2 for hook in hooks)
+    late_hooks = [
+        offset for offset in (
+            _hook_offset(candidate) for candidate in ranked
+        )
+        if offset is not None and offset > 3.0
+    ]
     closure_endings = sum(
         candidate.get("cliffhanger_type") == "closure"
         for candidate in ranked
@@ -127,6 +171,7 @@ def build_quality_check(
         "clips_ending_mid_dialogue": mid_dialogue,
         "clips_crossing_scene_boundaries": scene_crossings,
         "hooks_two_words_or_less": short_hooks,
+        "hooks_beyond_3_seconds": len(late_hooks),
         "closure_endings": closure_endings,
         "duplicates_removed": duplicate_dropped,
         "scoring_sources": scoring_counts,
@@ -159,6 +204,8 @@ def _write_quality_markdown(quality: dict, path: Path):
         f"**{quality['clips_crossing_scene_boundaries']}**",
         f"- Hooks of two words or fewer: "
         f"**{quality['hooks_two_words_or_less']}**",
+        f"- Hooks starting after 3 seconds: "
+        f"**{quality['hooks_beyond_3_seconds']}**",
         f"- Closure endings: **{quality['closure_endings']}**",
         f"- Duplicates removed from the ranked list: "
         f"**{quality['duplicates_removed']}**",
@@ -216,6 +263,14 @@ def run_batch4(
     )
     _write_quality_markdown(quality, export_dir / "quality_check.md")
 
+    audit = build_output_audit(
+        ranked=ranked,
+        episodes=episodes,
+        export_dir=export_dir,
+        quality=quality,
+    )
+    audit_json, audit_md = write_output_audit(audit, export_dir)
+
     summary = {
         "total_candidates": len(ranked),
         "duplicates_removed": len(dropped),
@@ -257,6 +312,7 @@ def run_batch4(
                 "clips_crossing_scene_boundaries"
             ],
             "hooks_two_words_or_less": quality["hooks_two_words_or_less"],
+            "hooks_beyond_3_seconds": quality["hooks_beyond_3_seconds"],
             "closure_endings": quality["closure_endings"],
             "duration_distinct_values": quality["duration_distinct_values"],
         },
@@ -265,10 +321,18 @@ def run_batch4(
             "quality or human-validated accuracy. All candidates require "
             "human review before final selection."
         ),
+        "requirements_check": {
+            "status": audit["status"],
+            "passed_checks": audit["passed_checks"],
+            "total_checks": audit["total_checks"],
+            "failed_checks": audit["failed_checks"],
+        },
         "json_export": json_path,
         "csv_export": csv_path,
         "rejected_export": rejected_path,
         "quality_check_export": str(quality_path),
+        "requirements_check_export": audit_json,
+        "requirements_check_markdown": audit_md,
     }
 
     summary_path = export_dir / "batch4_summary.json"
@@ -285,6 +349,13 @@ def run_batch4(
     print("JSON:", json_path)
     print("CSV:", csv_path)
     print("Quality check:", quality_path)
+    print(
+        "Requirements check:",
+        audit["status"],
+        f"({audit['passed_checks']}/{audit['total_checks']})",
+        "-",
+        audit_json,
+    )
     print("Summary:", summary_path)
 
     return {
@@ -292,11 +363,13 @@ def run_batch4(
         "dropped": dropped,
         "summary": summary,
         "quality": quality,
+        "audit": audit,
         "json_path": json_path,
         "csv_path": csv_path,
         "summary_path": str(summary_path),
         "quality_path": str(quality_path),
         "rejected_path": rejected_path,
+        "audit_path": audit_json,
     }
 
 

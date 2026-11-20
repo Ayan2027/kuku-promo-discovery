@@ -4,6 +4,8 @@ Turn a pack of timestamped microdrama screenplays into ranked 20–60 second pro
 
 This repository is the **Problem 1: Find the Promos** submission. It is a recall-oriented candidate generator plus a human-triage prototype. It is **not** an autonomous promo editor: the final choice stays with an editor.
 
+**Latest real-pack run:** 50 episodes, 100 scenes and 3,727 segments → **184 ranked candidates** (40 Good / 121 Weak / 22 Bad / 1 Needs Review), 20.0–59.9s, **17/17 hard brief checks passed**. The run used the deterministic provider: 0 LLM calls.
+
 ---
 
 ## Open the prototype
@@ -101,7 +103,7 @@ app.py / prototype   human triage, review decisions, downloads
 
 ### Key design decisions
 
-- **Boundary-aware windows.** A window can only start or end on a dialogue, action or scene boundary, and never strictly inside a spoken line. This is why the output has 137 distinct durations instead of 245 clips of exactly 30 seconds.
+- **Boundary-aware, fully covered windows.** A window can only start or end on a dialogue, action or scene boundary, never strictly inside a spoken line, and must be fully covered by source segments. This is why the output has 130 distinct durations instead of hundreds of clips of exactly 30 seconds.
 - **Non-overlapping selection.** The generator selects single-scene candidates first and only fills remaining slots with cross-scene clips. Duplicates are removed from the ranked list, not merely labelled.
 - **Python owns time.** The model may write a title or explanation, but it cannot invent or change a timestamp.
 - **Self-contained export.** Every candidate carries `source_segments` with ordered start/end timestamps, so the CSV/JSON can be checked without opening the input pack.
@@ -120,6 +122,7 @@ After a run, `data/exports/` (and `raw_outputs/`) contains:
 | `ranked_promos.csv` | Flat export with scores, reasons, and a `segment_timeline` column |
 | `batch4_summary.json` | Run summary, label counts, top 5 "post first" |
 | `quality_check.json` / `.md` | Honest failure analysis and bad-pick examples |
+| `requirements_check.json` / `.md` | 17 machine-checked hard requirements (coverage, duration, hooks, timestamps, source segments, labels, ranking) |
 | `rejected_candidates.json` | Overlapping duplicates removed from the ranked list |
 | `discovery_summary.json` | Provider status and per-episode discovery results |
 | `promo_analysis_metadata.json` | Per-candidate analysis provenance |
@@ -144,11 +147,14 @@ The tool is deliberately checked against its own output. The report identifies:
 - clips ending mid-dialogue
 - clips crossing scene boundaries
 - hooks of two words or fewer
+- hooks starting after three seconds
 - closure endings
 - duplicate candidates removed
 - concrete bad-pick examples with the score breakdown that caused them
 
-The current real-pack run is summarised in [`docs/solution.md`](docs/solution.md) and `raw_outputs/quality_check.md`. The short version: boundary snapping removed mid-dialogue cuts, but the ranker still picks some weak hooks and cross-scene clips. Those failures are reported, not hidden.
+It also runs a separate **requirements audit** against the exported files. The audit is deliberately boring and hard: every episode must be covered, every clip must be 20–60s, every timestamp must agree with its seconds field, every source timeline must be ordered and cover the cut, every hook must land within 3s, no clip may cut mid-dialogue, ranks must be contiguous and score-ordered, labels must match thresholds, and the CSV must match the JSON. The current real-pack run passes **17/17**.
+
+The current run is summarised in [`docs/solution.md`](docs/solution.md), `raw_outputs/quality_check.md` and `raw_outputs/requirements_check.md`. The short version: boundary snapping removed mid-dialogue and late-hook failures, but the ranker still picks some weak hooks and 17 cross-scene clips. Those failures are reported, not hidden.
 
 ---
 
@@ -156,7 +162,7 @@ The current real-pack run is summarised in [`docs/solution.md`](docs/solution.md
 
 - **Gemini 2.5 Flash** is wired as an optional judge (`src/ai/gemini_provider.py`). It is used only when `GEMINI_API_KEY` is set and `AI_PROVIDER` is `gemini` or `auto`.
 - **Local deterministic fallback** is the default in the submitted run because no API key was available. Every candidate in `raw_outputs/` is marked `DETERMINISTIC_FALLBACK`.
-- **AI coding assistant** was used to implement, review and debug the pipeline. One place it got it wrong: the first framing called the output "AI promo discovery" even though the final run used zero LLM calls. That overclaim was corrected in the UI, README and solution doc.
+- **opencode (DeepSeek V4.1 Flash)** was used as the AI coding assistant to implement, review and debug the pipeline. One place it got it wrong: the first framing called the output "AI promo discovery" even though the final run used zero LLM calls. That overclaim was corrected in the UI, README and solution doc.
 
 Do not claim the submitted run used an LLM when it did not. The provenance field is the source of truth.
 
@@ -219,8 +225,11 @@ and confirm no file under `data/input/` or `data/processed/` is staged.
 ## Limitations / next steps
 
 - The scorer is keyword- and boundary-based; it does not understand performance, irony, or visual payoff.
-- 15 of 193 clips in the current run still cross a scene boundary. Single-scene clips are preferred, not guaranteed.
-- The score ceiling is about 7.75/10; a labelled gold set is needed before claiming precision.
+- 17 of 184 clips in the current run still cross a scene boundary. Single-scene clips are preferred, not guaranteed.
+- 2 hooks are two words or fewer, and 121 of 184 candidates are weak. That is expected from a recall-oriented pass.
+- The score ceiling is 7.57/10; a labelled gold set is needed before claiming precision.
+- One parsing warning remains: `E022_S01_SEG0023` extends past its scene boundary, so that candidate is marked `NEEDS_REVIEW`.
+- The current output is single-episode and continuous; multi-episode or stitched promos are not generated.
 - Next step: 20–30 human-labelled clips, precision@5, a learned or LLM judge, and audio/visual beat detection.
 
 ---
@@ -235,10 +244,11 @@ src/demo_data.py            synthetic demo screenplays
 src/discovery/              window generation, discovery, dedup, ranking
 src/scoring/scorer.py       explainable scoring
 src/validation/             timestamp/provenance validation
+src/quality/                hard brief-requirements audit
 src/exports/                JSON/CSV exporters
 src/ingestion/              parser and dataset processor
 docs/solution.md            two-page solution document source
 docs/solution.pdf           submitted two-page PDF
 raw_outputs/                unedited run outputs (evaluator only)
-tests/                      29 unit tests
+tests/                      39 unit tests
 ```

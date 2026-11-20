@@ -2,11 +2,11 @@
   "total_episodes": 8,
   "successful_episodes": 8,
   "failed_episodes": 0,
-  "total_candidates": 15,
+  "total_candidates": 9,
   "rejected_window_count": 0,
   "analysis_mode_counts": {
     "GEMINI": 0,
-    "DETERMINISTIC_FALLBACK": 15
+    "DETERMINISTIC_FALLBACK": 9
   },
   "episode_results": [
     {
@@ -17,13 +17,13 @@
     },
     {
       "episode_number": 2,
-      "candidate_count": 3,
+      "candidate_count": 1,
       "rejected_window_count": 0,
       "status": "SUCCESS"
     },
     {
       "episode_number": 3,
-      "candidate_count": 3,
+      "candidate_count": 1,
       "rejected_window_count": 0,
       "status": "SUCCESS"
     },
@@ -35,13 +35,13 @@
     },
     {
       "episode_number": 5,
-      "candidate_count": 2,
+      "candidate_count": 1,
       "rejected_window_count": 0,
       "status": "SUCCESS"
     },
     {
       "episode_number": 6,
-      "candidate_count": 2,
+      "candidate_count": 1,
       "rejected_window_count": 0,
       "status": "SUCCESS"
     },

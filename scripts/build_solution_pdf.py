@@ -57,16 +57,16 @@ def build_styles():
             textColor=colors.HexColor("#475569"), spaceAfter=6,
         ),
         "h2": ParagraphStyle(
-            "H2", parent=base["Heading2"], fontSize=12, leading=14,
-            spaceBefore=8, spaceAfter=3, textColor=colors.HexColor("#0f172a"),
+            "H2", parent=base["Heading2"], fontSize=11.5, leading=13.5,
+            spaceBefore=7, spaceAfter=2, textColor=colors.HexColor("#0f172a"),
         ),
         "body": ParagraphStyle(
-            "Body", parent=base["BodyText"], fontSize=9.3, leading=12.2,
-            alignment=TA_LEFT, spaceAfter=4,
+            "Body", parent=base["BodyText"], fontSize=9.1, leading=11.8,
+            alignment=TA_LEFT, spaceAfter=3.5,
         ),
         "bullet": ParagraphStyle(
-            "Bullet", parent=base["BodyText"], fontSize=9.1, leading=11.8,
-            leftIndent=10, bulletIndent=2, spaceAfter=1,
+            "Bullet", parent=base["BodyText"], fontSize=9.0, leading=11.4,
+            leftIndent=10, bulletIndent=2, spaceAfter=0.5,
         ),
         "quote": ParagraphStyle(
             "Quote", parent=base["BodyText"], fontSize=9.4, leading=12.4,
@@ -74,14 +74,14 @@ def build_styles():
             borderPadding=4, spaceBefore=3, spaceAfter=5,
         ),
         "code": ParagraphStyle(
-            "Code", parent=base["Code"], fontSize=8.1, leading=10.2,
+            "Code", parent=base["Code"], fontSize=7.9, leading=9.8,
             backColor=colors.HexColor("#f1f5f9"), borderPadding=4,
         ),
         "cell": ParagraphStyle(
-            "Cell", parent=base["BodyText"], fontSize=8.3, leading=10.4,
+            "Cell", parent=base["BodyText"], fontSize=8.1, leading=10.0,
         ),
         "cellhead": ParagraphStyle(
-            "CellHead", parent=base["BodyText"], fontSize=8.3, leading=10.4,
+            "CellHead", parent=base["BodyText"], fontSize=8.1, leading=10.0,
             textColor=colors.white,
         ),
     }
@@ -148,7 +148,11 @@ def parse_markdown(text: str, styles):
                     data.append([Paragraph(inline(cell), style) for cell in row])
 
                 width = A4[0] - 3.4 * cm
-                table = Table(data, colWidths=[width * 0.55, width * 0.45])
+                table = Table(
+                    data,
+                    colWidths=[width * 0.55, width * 0.45],
+                    repeatRows=1,
+                )
                 table.setStyle(TableStyle([
                     ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#0f172a")),
                     ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
@@ -156,8 +160,8 @@ def parse_markdown(text: str, styles):
                     ("VALIGN", (0, 0), (-1, -1), "TOP"),
                     ("LEFTPADDING", (0, 0), (-1, -1), 5),
                     ("RIGHTPADDING", (0, 0), (-1, -1), 5),
-                    ("TOPPADDING", (0, 0), (-1, -1), 3),
-                    ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
+                    ("TOPPADDING", (0, 0), (-1, -1), 2.4),
+                    ("BOTTOMPADDING", (0, 0), (-1, -1), 2.4),
                 ]))
                 story.append(table)
                 story.append(Spacer(1, 4))

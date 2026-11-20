@@ -7,6 +7,7 @@ from src.discovery.window_generator import (
 )
 
 from src.discovery.promo_discovery import (
+    _source_segments,
     fallback_evaluation,
     create_candidate,
 )
@@ -152,6 +153,155 @@ def test_windows_end_on_a_source_boundary():
 
     for window in windows:
         assert round(window["end_seconds"], 2) in boundaries
+
+
+def make_camera_first_episode():
+
+    scene = Scene(
+        scene_id="E002_S01",
+        episode_number=2,
+        scene_heading="INT. HALL - DAY",
+        start_timestamp="00:00.00",
+        end_timestamp="00:55.00",
+        start_seconds=0,
+        end_seconds=55,
+    )
+
+    segments = [
+        Segment(
+            segment_id="C1",
+            episode_number=2,
+            scene_id="E002_S01",
+            segment_type="CAMERA",
+            start_timestamp="00:00.00",
+            end_timestamp="00:06.00",
+            start_seconds=0,
+            end_seconds=6,
+            content="The camera pans across the hall.",
+            source_file="episode-002.txt",
+        ),
+        Segment(
+            segment_id="D1",
+            episode_number=2,
+            scene_id="E002_S01",
+            segment_type="DIALOGUE",
+            speaker="HERO",
+            start_timestamp="00:06.00",
+            end_timestamp="00:20.00",
+            start_seconds=6,
+            end_seconds=20,
+            content="You betrayed me!",
+            source_file="episode-002.txt",
+        ),
+        Segment(
+            segment_id="A1",
+            episode_number=2,
+            scene_id="E002_S01",
+            segment_type="ACTION",
+            start_timestamp="00:20.00",
+            end_timestamp="00:40.00",
+            start_seconds=20,
+            end_seconds=40,
+            content="He slaps her.",
+            source_file="episode-002.txt",
+        ),
+        Segment(
+            segment_id="D2",
+            episode_number=2,
+            scene_id="E002_S01",
+            segment_type="DIALOGUE",
+            speaker="HEROINE",
+            start_timestamp="00:40.00",
+            end_timestamp="00:55.00",
+            start_seconds=40,
+            end_seconds=55,
+            content="I will never forgive you...",
+            source_file="episode-002.txt",
+        ),
+    ]
+
+    return Episode(
+        episode_number=2,
+        source_file="episode-002.txt",
+        logline="A public slap.",
+        continuity_notes="Test continuity.",
+        scenes=[scene],
+        segments=segments,
+        duration_seconds=55,
+        raw_text="Test screenplay two",
+    )
+
+
+def test_windows_open_on_a_beat_within_three_seconds():
+
+    episode = make_camera_first_episode()
+
+    windows = generate_candidate_windows(episode, max_windows=5)
+
+    assert windows
+    for window in windows:
+        beats = [
+            float(segment.start_seconds)
+            for segment in window["segments"]
+            if segment.segment_type in ("DIALOGUE", "ACTION")
+        ]
+        assert beats
+        assert min(beats) <= window["start_seconds"] + 3.0
+        # The scene opens with a six-second camera beat; no candidate may
+        # start there and leave the viewer waiting for a hook.
+        assert window["start_seconds"] > 0
+
+
+def test_source_segments_are_clipped_to_the_window():
+
+    episode = make_test_episode()
+    segments = episode.segments
+
+    clipped = _source_segments(segments, start=2.0, end=15.0)
+
+    assert clipped
+    assert clipped[0].start_seconds == 2.0
+    assert clipped[-1].end_seconds == 15.0
+    for segment in clipped:
+        assert segment.start_seconds >= 2.0
+        assert segment.end_seconds <= 15.0
+        assert segment.end_seconds > segment.start_seconds
+
+
+def test_windows_do_not_include_dead_air():
+    episode = make_camera_first_episode()
+    # Scene metadata says 55s, but the final beat ends at 55s in this test.
+    # Shorten the last beat so the scene has a 10-second dead tail.
+    episode.segments[-1].end_seconds = 45
+    episode.segments[-1].end_timestamp = "00:45.00"
+
+    windows = generate_candidate_windows(episode, max_windows=5)
+
+    assert windows
+    for window in windows:
+        assert window["end_seconds"] <= 45.0
+
+
+def test_candidate_segment_timeline_covers_clip_bounds():
+
+    episode = make_test_episode()
+    window = generate_candidate_windows(episode)[0]
+    candidate, _ = create_candidate(
+        episode,
+        window,
+        fallback_evaluation(window),
+        "DETERMINISTIC_FALLBACK",
+    )
+
+    # Segments are ordered by start time; their union covers the clip. A
+    # shorter overlapping segment can be listed after a longer one, so the
+    # bounds are checked across the whole timeline rather than its last row.
+    assert candidate.source_segments[0].start_seconds == (
+        candidate.start_seconds
+    )
+    assert max(
+        segment.end_seconds for segment in candidate.source_segments
+    ) == candidate.end_seconds
 
 
 def test_promo_id_has_a_single_episode_prefix():

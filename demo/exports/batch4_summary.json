@@ -1,15 +1,15 @@
 {
-  "total_candidates": 15,
+  "total_candidates": 9,
   "duplicates_removed": 0,
   "validation_status_counts": {
-    "VALID": 15
+    "VALID": 9
   },
   "human_review_label_counts": {
     "Good Promo": 2,
-    "Weak Promo": 10,
-    "Bad Promo": 3
+    "Weak Promo": 6,
+    "Bad Promo": 1
   },
-  "average_heuristic_score": 5.57,
+  "average_heuristic_score": 6.0,
   "highest_score": 6.88,
   "lowest_score": 3.35,
   "scoring_method": "Deterministic screenplay-text heuristics",
@@ -35,10 +35,10 @@
       "rank": 2,
       "promo_id": "E003_W0001",
       "episode_number": 3,
-      "score": 6.82,
-      "reason": "Rank 2: 6.82/10 (Good Promo), scored by heuristic. Opens with a conflict hook and ends on question tension.",
-      "start": "00:00.00",
-      "end": "00:26.00"
+      "score": 6.64,
+      "reason": "Rank 2: 6.64/10 (Good Promo), scored by heuristic. Opens with a conflict hook and ends on unresolved tension.",
+      "start": "00:04.00",
+      "end": "00:35.00"
     },
     {
       "rank": 3,
@@ -72,12 +72,21 @@
     "clips_ending_mid_dialogue": 0,
     "clips_crossing_scene_boundaries": 0,
     "hooks_two_words_or_less": 0,
+    "hooks_beyond_3_seconds": 0,
     "closure_endings": 0,
-    "duration_distinct_values": 12
+    "duration_distinct_values": 8
   },
   "note": "Scores are heuristic ranking signals, not measured promo quality or human-validated accuracy. All candidates require human review before final selection.",
+  "requirements_check": {
+    "status": "PASS",
+    "passed_checks": 17,
+    "total_checks": 17,
+    "failed_checks": 0
+  },
   "json_export": "demo\\exports\\ranked_promos.json",
   "csv_export": "demo\\exports\\ranked_promos.csv",
   "rejected_export": "demo\\exports\\rejected_candidates.json",
-  "quality_check_export": "demo\\exports\\quality_check.json"
+  "quality_check_export": "demo\\exports\\quality_check.json",
+  "requirements_check_export": "demo\\exports\\requirements_check.json",
+  "requirements_check_markdown": "demo\\exports\\requirements_check.md"
 }

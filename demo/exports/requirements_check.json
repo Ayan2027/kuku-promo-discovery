@@ -1,0 +1,120 @@
+{
+  "generated_from": "ranked_promos.json + parsed_screenplays.json",
+  "total_checks": 17,
+  "passed_checks": 17,
+  "failed_checks": 0,
+  "status": "PASS",
+  "counts": {
+    "candidates": 9,
+    "episodes": 8,
+    "parsed_episodes": 8,
+    "duration_min": 21.0,
+    "duration_max": 48.0,
+    "hooks_beyond_3_seconds": 0,
+    "clips_ending_mid_dialogue": 0
+  },
+  "checks": [
+    {
+      "id": "has_candidates",
+      "requirement": "The run produces at least one promo.",
+      "passed": true,
+      "detail": "9 ranked candidates."
+    },
+    {
+      "id": "all_episodes_covered",
+      "requirement": "Every parsed episode contributes at least one candidate.",
+      "passed": true,
+      "detail": "All episodes covered."
+    },
+    {
+      "id": "duration_20_60",
+      "requirement": "Every promo is 20-60 seconds long.",
+      "passed": true,
+      "detail": "9 clips in range."
+    },
+    {
+      "id": "timestamp_consistency",
+      "requirement": "Start, end and duration agree in every candidate.",
+      "passed": true,
+      "detail": "All timestamps are internally consistent."
+    },
+    {
+      "id": "source_segments_present",
+      "requirement": "Every candidate names its ordered source segments.",
+      "passed": true,
+      "detail": "All candidates embed source segments."
+    },
+    {
+      "id": "source_timeline_covers_clip",
+      "requirement": "Embedded segments are ordered and cover the full clip.",
+      "passed": true,
+      "detail": "All source timelines are ordered and clipped to the cut."
+    },
+    {
+      "id": "hook_present",
+      "requirement": "Every promo states its opening hook.",
+      "passed": true,
+      "detail": "All hooks present."
+    },
+    {
+      "id": "cliffhanger_present",
+      "requirement": "Every promo states its cliffhanger or ending beat.",
+      "passed": true,
+      "detail": "All endings present."
+    },
+    {
+      "id": "why_it_works_one_line",
+      "requirement": "Every promo carries a one-line reason.",
+      "passed": true,
+      "detail": "All one-line reasons present."
+    },
+    {
+      "id": "hook_within_3s",
+      "requirement": "Every promo opens on a hook within the first 3 seconds.",
+      "passed": true,
+      "detail": "All hooks land within 3.0s."
+    },
+    {
+      "id": "no_mid_dialogue_cut",
+      "requirement": "No promo cuts in the middle of a spoken line.",
+      "passed": true,
+      "detail": "No mid-dialogue cuts."
+    },
+    {
+      "id": "unique_ids",
+      "requirement": "Promo IDs are unique.",
+      "passed": true,
+      "detail": "9 IDs, 9 unique."
+    },
+    {
+      "id": "ranking_is_global",
+      "requirement": "Ranks are contiguous and ordered by score.",
+      "passed": true,
+      "detail": "Global score order."
+    },
+    {
+      "id": "labels_match_scores",
+      "requirement": "Quality labels agree with the configured thresholds.",
+      "passed": true,
+      "detail": "Labels are threshold-consistent."
+    },
+    {
+      "id": "no_invalid_candidates",
+      "requirement": "No candidate fails structural validation.",
+      "passed": true,
+      "detail": "No invalid candidates."
+    },
+    {
+      "id": "csv_matches_json",
+      "requirement": "The CSV contains exactly the ranked JSON candidates.",
+      "passed": true,
+      "detail": "CSV and JSON match."
+    },
+    {
+      "id": "quality_report_present",
+      "requirement": "The quality report exists and matches the run.",
+      "passed": true,
+      "detail": "Quality report matches."
+    }
+  ]
+}

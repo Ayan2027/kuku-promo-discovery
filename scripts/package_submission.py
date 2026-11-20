@@ -44,12 +44,13 @@ SUBMISSION_README = """# Kuku AI Generalist — Problem 1 submission
 
 - `docs/solution.pdf` — the required two-page solution document.
 - `docs/solution.md` — editable source for the PDF.
-- `raw_outputs/` — unedited machine outputs from the real-pack run.
+- `raw_outputs/` — unedited machine outputs from the real-pack run: 50 episodes,
+  3,727 segments → 184 ranked candidates, 17/17 hard brief checks passed.
 - `prototype/index.html` — self-contained synthetic demo; open it directly.
 - `app.py` — Streamlit human-triage prototype.
-- `src/` — parser, discovery, scoring, validation, ranking, exports and CLI.
+- `src/` — parser, discovery, scoring, validation, quality audit, ranking, exports and CLI.
 - `demo/` — synthetic demo data, safe to publish.
-- `tests/` — 29 unit tests (`python -m pytest -q`).
+- `tests/` — 39 unit tests (`python -m pytest -q`).
 - `README.md` — exact run steps, output schema, AI-tool disclosure and limitations.
 
 ## Run it

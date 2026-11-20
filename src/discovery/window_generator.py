@@ -21,7 +21,11 @@ from __future__ import annotations
 import re
 
 from src.config import settings
-from src.scoring.scorer import score_window
+from src.scoring.scorer import (
+    HOOK_WINDOW_SECONDS,
+    first_beat_start,
+    score_window,
+)
 from src.utils.timestamps import seconds_to_timestamp
 
 
@@ -87,6 +91,37 @@ def _inside_dialogue(episode, value: float) -> bool:
         < float(segment.end_seconds) - 0.01
         for segment in episode.segments
     )
+
+
+def _covers_window(selected, start: float, end: float) -> bool:
+    """True when the source segments cover the whole window.
+
+    Screenplay metadata can claim a scene lasts longer than its final timed
+    beat. Ending a clip on that scene boundary would export dead air, and the
+    embedded timeline would not cover the stated cut. Such windows are not
+    admissible.
+    """
+
+    intervals = sorted(
+        (
+            max(start, float(segment.start_seconds)),
+            min(end, float(segment.end_seconds)),
+        )
+        for segment in selected
+        if float(segment.end_seconds) > start
+        and float(segment.start_seconds) < end
+    )
+    if not intervals:
+        return False
+    if intervals[0][0] > start + 0.05:
+        return False
+
+    covered_until = intervals[0][1]
+    for interval_start, interval_end in intervals[1:]:
+        if interval_start > covered_until + 0.05:
+            return False
+        covered_until = max(covered_until, interval_end)
+    return covered_until >= end - 0.05
 
 
 def _boundary_values(episode, kinds: str) -> list[float]:
@@ -169,7 +204,17 @@ def generate_candidate_windows(episode, max_windows=5, min_score=None):
                     and float(segment.end_seconds) > start
                 )
             ]
-            if not selected:
+            if not selected or not _covers_window(selected, start, end):
+                continue
+
+            # The brief requires the hook in the first three seconds. A window
+            # that opens with a long camera beat before anyone speaks cannot
+            # satisfy that, so it is never offered as a candidate.
+            beat_start = first_beat_start(selected)
+            if (
+                beat_start is None
+                or beat_start > start + HOOK_WINDOW_SECONDS
+            ):
                 continue
 
             scores, editorial = score_window(start, end, episode.segments)

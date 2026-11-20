@@ -39,6 +39,8 @@ def _copy_raw_outputs(processed_dir: Path, export_dir: Path, raw_dir: Path):
         "batch4_summary.json",
         "quality_check.json",
         "quality_check.md",
+        "requirements_check.json",
+        "requirements_check.md",
         "rejected_candidates.json",
     ]
     processed_files = [
@@ -70,8 +72,10 @@ def _copy_raw_outputs(processed_dir: Path, export_dir: Path, raw_dir: Path):
         f"- Files: {', '.join(copied)}\n\n"
         "`ranked_promos.json` / `.csv` are the ranked output. "
         "`quality_check.json` / `.md` are the honest failure analysis. "
-        "`rejected_candidates.json` contains overlapping duplicates that "
-        "were removed from the ranked list.\n",
+        "`requirements_check.json` / `.md` are the machine-checked "
+        "brief requirements (duration, coverage, hooks, timestamps, source "
+        "segments, labels, ranking). `rejected_candidates.json` contains "
+        "overlapping duplicates that were removed from the ranked list.\n",
         encoding="utf-8",
     )
     return copied
@@ -196,7 +200,12 @@ def cmd_demo(args):
     prototype = build_static_prototype(export_dir, Path(args.prototype))
     print("[5/5] Built static prototype:", prototype)
 
-    _copy_raw_outputs(processed_dir, export_dir, Path(args.raw_outputs or "raw_outputs"))
+    if args.raw_outputs:
+        _copy_raw_outputs(
+            processed_dir,
+            export_dir,
+            Path(args.raw_outputs),
+        )
     return result
 
 
@@ -237,7 +246,12 @@ def build_parser():
     demo = sub.add_parser("demo", help="Build the synthetic public demo")
     demo.add_argument("--root", default="demo")
     demo.add_argument("--prototype", default="prototype/index.html")
-    demo.add_argument("--raw-outputs", default="raw_outputs")
+    demo.add_argument(
+        "--raw-outputs",
+        default=None,
+        help="Optional folder for demo outputs. Defaults to not touching "
+             "raw_outputs/.",
+    )
     demo.set_defaults(func=cmd_demo)
 
     return parser

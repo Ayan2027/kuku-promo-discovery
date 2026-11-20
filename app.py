@@ -25,7 +25,7 @@ DATA_DIR = ROOT / "data"
 
 st.set_page_config(
     page_title="Kuku Promo Discovery",
-    page_icon="ðŸŽ¬",
+    page_icon="🎬",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -71,6 +71,7 @@ RANKED_FILE = EXPORTS_DIR / "ranked_promos.json"
 EPISODES_FILE = PROCESSED_DIR / "parsed_screenplays.json"
 QUALITY_FILE = EXPORTS_DIR / "quality_check.json"
 SUMMARY_FILE = EXPORTS_DIR / "batch4_summary.json"
+AUDIT_FILE = EXPORTS_DIR / "requirements_check.json"
 REVIEWS_FILE = PROCESSED_DIR / "human_reviews.json"
 
 
@@ -171,13 +172,13 @@ def render_candidate(candidate, episode_map, reviews, key_prefix=""):
     col4.metric("Episode", candidate.get("episode_number"))
 
     st.write(
-        f"**Time:** {candidate.get('start_timestamp')} â€“ "
+        f"**Time:** {candidate.get('start_timestamp')} – "
         f"{candidate.get('end_timestamp')}"
     )
     st.write(
-        f"**Machine label:** {candidate.get('human_review_label')} Â· "
-        f"**Validation:** {candidate.get('validation_status')} Â· "
-        f"**Analysis:** {candidate.get('analysis_mode')} Â· "
+        f"**Machine label:** {candidate.get('human_review_label')} · "
+        f"**Validation:** {candidate.get('validation_status')} · "
+        f"**Analysis:** {candidate.get('analysis_mode')} · "
         f"**Score source:** {candidate.get('score_source')}"
     )
     if candidate.get("rank_reason"):
@@ -249,11 +250,12 @@ try:
     reviews = load_reviews()
     quality = read_json(QUALITY_FILE, {}) or {}
     summary = read_json(SUMMARY_FILE, {}) or {}
+    audit = read_json(AUDIT_FILE, {}) or {}
 except Exception as exc:
     st.error(f"Unable to load project data: {exc}")
     st.stop()
 
-st.title("ðŸŽ¬ Kuku Promo Discovery")
+st.title("🎬 Kuku Promo Discovery")
 st.caption(
     "Boundary-aware candidate generation, explainable ranking, "
     "and human triage. Scores are heuristics, not measured ad performance."
@@ -262,8 +264,8 @@ if SOURCE_LABEL == "synthetic demo":
     st.info(
         "You are viewing the **synthetic public demo** (8 hand-written "
         "episodes). The real input pack and its outputs are intentionally "
-        "not published. The real-pack run produced 193 ranked candidates, "
-        "46 of them above the internal Good threshold."
+        "not published. The real-pack run produced 184 ranked candidates, "
+        "40 of them above the internal Good threshold."
     )
 elif SOURCE_LABEL == "missing":
     st.error(
@@ -280,7 +282,7 @@ episode_map = {
 # FILTERS
 # ---------------------------------------------------------
 
-st.sidebar.header("ðŸ”Ž Filters")
+st.sidebar.header("🔎 Filters")
 st.sidebar.caption(f"Data source: {SOURCE_LABEL}")
 
 episode_numbers = sorted({int(c["episode_number"]) for c in candidates})
@@ -317,7 +319,7 @@ selected_decisions = st.sidebar.multiselect(
 
 search_text = st.sidebar.text_input(
     "Search title, hook, dialogue or reason",
-    placeholder="Search screenplay momentsâ€¦",
+    placeholder="Search screenplay moments…",
 )
 
 filtered = []
@@ -351,11 +353,11 @@ for candidate in candidates:
 # ---------------------------------------------------------
 
 tab_overview, tab_candidates, tab_quality, tab_review, tab_export = st.tabs([
-    "ðŸ“Š Overview",
-    "ðŸŽžï¸ Candidates",
-    "ðŸ§ª Quality Check",
-    "ðŸ“ Human Review",
-    "ðŸ“¥ Exports",
+    "📊 Overview",
+    "🎞️ Candidates",
+    "🧪 Quality Check",
+    "📝 Human Review",
+    "📥 Exports",
 ])
 
 with tab_overview:
@@ -378,6 +380,16 @@ with tab_overview:
         "Distinct durations", quality.get("duration_distinct_values", 0)
     )
 
+    if audit:
+        audit_status = audit.get("status", "UNKNOWN")
+        st.caption(
+            f"Brief requirements check: **{audit_status}** — "
+            f"{audit.get('passed_checks', 0)}/"
+            f"{audit.get('total_checks', 0)} hard checks passed "
+            f"(duration, episode coverage, hooks, timestamps, source "
+            f"segments, labels, ranking)."
+        )
+
     st.divider()
     st.subheader("Post these first")
     st.caption(
@@ -398,9 +410,9 @@ with tab_overview:
     ]
     for item in top:
         st.markdown(
-            f"**#{item['rank']} Â· {item['promo_id']} Â· Episode "
-            f"{item['episode_number']} Â· {item['score']}/10**  \n"
-            f"{item['start']}â€“{item['end']}  \n"
+            f"**#{item['rank']} · {item['promo_id']} · Episode "
+            f"{item['episode_number']} · {item['score']}/10**  \n"
+            f"{item['start']}–{item['end']}  \n"
             f"{item['reason']}"
         )
 
@@ -463,7 +475,7 @@ with tab_candidates:
 # ---------------------------------------------------------
 
 with tab_quality:
-    st.subheader("Quality check â€” where it picks badly")
+    st.subheader("Quality check — where it picks badly")
     st.caption(
         "This section is deliberately adversarial. The tool is a recall-oriented "
         "candidate generator, not an autonomous promo editor."
@@ -478,6 +490,7 @@ with tab_quality:
         ("Clips ending mid-dialogue", "clips_ending_mid_dialogue"),
         ("Clips crossing scene boundaries", "clips_crossing_scene_boundaries"),
         ("Hooks of two words or fewer", "hooks_two_words_or_less"),
+        ("Hooks starting after 3 seconds", "hooks_beyond_3_seconds"),
         ("Closure endings", "closure_endings"),
         ("Duplicates removed from ranked list", "duplicates_removed"),
         ("Distinct durations", "duration_distinct_values"),
@@ -491,15 +504,35 @@ with tab_quality:
         hide_index=True,
     )
 
+    if audit:
+        st.markdown("#### Hard brief requirements")
+        st.caption(
+            "These are admissibility checks, not quality judgements. A "
+            "failed check means the output is not usable as specified."
+        )
+        checks_rows = audit.get("checks") or []
+        st.dataframe(
+            pd.DataFrame([
+                {
+                    "Requirement": check.get("requirement"),
+                    "Result": "PASS" if check.get("passed") else "FAIL",
+                    "Detail": check.get("detail"),
+                }
+                for check in checks_rows
+            ]),
+            width="stretch",
+            hide_index=True,
+        )
+
     st.markdown("#### Concrete bad picks")
     bad = quality.get("bad_pick_examples") or []
     if bad:
         for item in bad:
             st.markdown(
-                f"**Rank {item['rank']} Â· {item['promo_id']} Â· "
-                f"{item['score']}/10 Â· {item['label']}**  \n"
-                f"Hook: â€œ{item.get('opening_hook', '')}â€  \n"
-                f"Ending: â€œ{item.get('ending', '')}â€  \n"
+                f"**Rank {item['rank']} · {item['promo_id']} · "
+                f"{item['score']}/10 · {item['label']}**  \n"
+                f"Hook: “{item.get('opening_hook', '')}”  \n"
+                f"Ending: “{item.get('ending', '')}”  \n"
                 f"{item['why_it_fails']}"
             )
     else:
@@ -559,12 +592,12 @@ with tab_review:
                 "Reviewer notes",
                 value=current.get("notes", ""),
                 placeholder=(
-                    "Explain why this promo is approved, rejected, or needs editingâ€¦"
+                    "Explain why this promo is approved, rejected, or needs editing…"
                 ),
                 height=120,
             )
             submitted = st.form_submit_button(
-                "ðŸ’¾ Save human review", type="primary"
+                "💾 Save human review", type="primary"
             )
             if submitted:
                 persisted = save_review(promo_id, decision, notes)
@@ -607,7 +640,7 @@ with tab_export:
             ensure_ascii=False,
         )
         st.download_button(
-            "â¬‡ï¸ Download approved promos (JSON)",
+            "Download approved promos (JSON)",
             data=approved_json,
             file_name="approved_promos.json",
             mime="application/json",
@@ -629,7 +662,7 @@ with tab_export:
             writer.writerow(row)
 
         st.download_button(
-            "â¬‡ï¸ Download approved promos (CSV)",
+            "Download approved promos (CSV)",
             data=buffer.getvalue().encode("utf-8-sig"),
             file_name="approved_promos.csv",
             mime="text/csv",
@@ -641,7 +674,7 @@ with tab_export:
         )
 
     st.download_button(
-        "â¬‡ï¸ Download all ranked promos (CSV)",
+        "Download all ranked promos (CSV)",
         data=(EXPORTS_DIR / "ranked_promos.csv").read_bytes()
         if (EXPORTS_DIR / "ranked_promos.csv").exists() else b"",
         file_name="ranked_promos.csv",
@@ -664,7 +697,7 @@ with tab_export:
             hide_index=True,
         )
         st.download_button(
-            "â¬‡ï¸ Download review history (JSON)",
+            "Download review history (JSON)",
             data=json.dumps(current_reviews, indent=2, ensure_ascii=False),
             file_name="human_reviews.json",
             mime="application/json",

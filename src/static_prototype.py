@@ -143,6 +143,7 @@ TEMPLATE = r"""<!doctype html>
 const DATA = __DATA__;
 const QUALITY = __QUALITY__;
 const SUMMARY = __SUMMARY__;
+const AUDIT = __AUDIT__;
 
 const labelClass = (label) => String(label || "").split(" ")[0];
 const esc = (value) => String(value ?? "").replace(/[&<>"']/g, c => ({
@@ -161,7 +162,8 @@ function metrics() {
       `${labels["Good Promo"] || 0} / ${labels["Weak Promo"] || 0} / ${labels["Bad Promo"] || 0}`],
     ["Duplicates removed", QUALITY.duplicates_removed ?? 0],
     ["Mid-dialogue cuts", QUALITY.clips_ending_mid_dialogue ?? 0],
-    ["Score range", `${QUALITY.score_min ?? 0}–${QUALITY.score_max ?? 0}`],
+    ["Brief checks", `${AUDIT.passed_checks ?? 0}/${AUDIT.total_checks ?? 0}`],
+    ["Score range", `${QUALITY.score_min ?? 0}\u2013${QUALITY.score_max ?? 0}`],
   ];
   document.getElementById("metrics").innerHTML = items.map(([k,v]) =>
     `<div class="metric"><span>${esc(k)}</span><b>${esc(v)}</b></div>`).join("");
@@ -264,10 +266,15 @@ function renderQuality() {
     ["Clips ending mid-dialogue", QUALITY.clips_ending_mid_dialogue],
     ["Clips crossing scene boundaries", QUALITY.clips_crossing_scene_boundaries],
     ["Hooks of two words or fewer", QUALITY.hooks_two_words_or_less],
+    ["Hooks starting after 3 seconds", QUALITY.hooks_beyond_3_seconds],
     ["Closure endings", QUALITY.closure_endings],
     ["Distinct durations", QUALITY.duration_distinct_values],
   ];
-  quality.innerHTML = `<table><tbody>${rows.map(([k,v]) =>
+  const auditNote = AUDIT.status ? `<p><b>Hard brief requirements: ${esc(AUDIT.status)}</b>
+    \u2014 ${esc(AUDIT.passed_checks)}/${esc(AUDIT.total_checks)} passed. These are
+    admissibility checks (duration, coverage, hooks, timestamps, source
+    segments, labels, ranking), not quality judgements.</p>` : "";
+  quality.innerHTML = `${auditNote}<table><tbody>${rows.map(([k,v]) =>
     `<tr><td>${esc(k)}</td><td><b>${esc(v)}</b></td></tr>`).join("")}</tbody></table>
     <h3 style="margin-top:16px">Bad-pick examples</h3>
     ${bad.length ? bad.map(item => `<div class="badpick"><b>Rank ${esc(item.rank)} ·
@@ -295,6 +302,12 @@ def build_static_prototype(export_dir, output_path):
     data = json.loads((export_dir / "ranked_promos.json").read_text(encoding="utf-8"))
     quality = json.loads((export_dir / "quality_check.json").read_text(encoding="utf-8"))
     summary = json.loads((export_dir / "batch4_summary.json").read_text(encoding="utf-8"))
+    audit_path = export_dir / "requirements_check.json"
+    audit = (
+        json.loads(audit_path.read_text(encoding="utf-8"))
+        if audit_path.exists()
+        else {}
+    )
 
     def safe_json(value):
         return json.dumps(value, ensure_ascii=False).replace("</", "<\\/")
@@ -304,6 +317,7 @@ def build_static_prototype(export_dir, output_path):
         .replace("__DATA__", safe_json(data))
         .replace("__QUALITY__", safe_json(quality))
         .replace("__SUMMARY__", safe_json(summary))
+        .replace("__AUDIT__", safe_json(audit))
     )
     output_path.write_text(html, encoding="utf-8")
     return str(output_path)

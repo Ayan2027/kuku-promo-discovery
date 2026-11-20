@@ -102,7 +102,7 @@
     ],
     "hook_type": "conflict",
     "cliffhanger_type": "question",
-    "why_it_works": "Opens on conflict dialogue/action: \"GERALD: Leave before you embarrass yourself.\". The 25s cut lands on question tension: \"GERALD: Then who did?\". The scene carries conflict signals.",
+    "why_it_works": "Opens on a conflict hook (\"GERALD: Leave before you embarrass yourself.\") and cuts at 25s on question tension.",
     "analysis_mode": "DETERMINISTIC_FALLBACK",
     "score_breakdown": {
       "hook_strength": 6.5,
@@ -120,40 +120,75 @@
   },
   {
     "promo_id": "E001_W0002",
-    "title": "Episode 1 — Romance: LADY JULIANA What mean",
+    "title": "Episode 1 — Romance: LADY JULIANA Gerald waiting",
     "episode_number": 1,
-    "start_timestamp": "00:09.50",
-    "end_timestamp": "00:55.00",
-    "start_seconds": 9.5,
-    "end_seconds": 55.0,
-    "duration_seconds": 45.5,
-    "opening_hook": "LADY JULIANA: What do you mean?",
+    "start_timestamp": "00:00.00",
+    "end_timestamp": "00:27.00",
+    "start_seconds": 0.0,
+    "end_seconds": 27.0,
+    "duration_seconds": 27.0,
+    "opening_hook": "LADY JULIANA: Gerald is waiting for me.",
     "main_dramatic_moment": "LADY JULIANA: Then you will never have my name or my inheritance.",
-    "ending_cliffhanger_or_payoff": "Clarissa lifts a stolen pendant from Juliana's throat.",
-    "promotional_justification": "Opens on question dialogue/action: \"LADY JULIANA: What do you mean?\". The 46s cut lands on unresolved tension: \"Clarissa lifts a stolen pendant from Juliana's throat.\". The scene carries romance signals.",
+    "ending_cliffhanger_or_payoff": "LADY JULIANA: Then you will never have my name or my inheritance.",
+    "promotional_justification": "Opens on conflict dialogue/action: \"LADY JULIANA: Gerald is waiting for me.\". The 27s cut lands on unresolved tension: \"LADY JULIANA: Then you will never have my name or my inheritance.\". The scene carries romance, suspense signals.",
     "dialogue": [
+      "\"Gerald is waiting for me.\"",
+      "\"Not anymore. Turn around.\"",
       "\"What do you mean?\"",
       "\"You brought me here to watch you marry my sister?\"",
       "\"Your family chose Clarissa. I chose power.\"",
-      "\"Then you will never have my name or my inheritance.\"",
-      "\"We already have both, sister.\""
+      "\"Then you will never have my name or my inheritance.\""
     ],
     "characters": [
-      "CLARISSA",
       "GERALD",
-      "LADY JULIANA"
+      "LADY JULIANA",
+      "MATRIARCH"
     ],
     "emotional_category": "Romance",
     "source_segment_ids": [
+      "E001_S01_SEG0001",
+      "E001_S01_SEG0002",
+      "E001_S01_SEG0003",
       "E001_S01_SEG0004",
       "E001_S01_SEG0005",
       "E001_S01_SEG0006",
       "E001_S01_SEG0007",
-      "E001_S01_SEG0008",
-      "E001_S01_SEG0009",
-      "E001_S01_SEG0010"
+      "E001_S01_SEG0008"
     ],
     "source_segments": [
+      {
+        "segment_id": "E001_S01_SEG0001",
+        "scene_id": "E001_S01",
+        "segment_type": "CAMERA",
+        "speaker": null,
+        "start_timestamp": "00:00.00",
+        "end_timestamp": "00:03.00",
+        "start_seconds": 0.0,
+        "end_seconds": 3.0,
+        "content": "The cathedral doors open on a bride in white."
+      },
+      {
+        "segment_id": "E001_S01_SEG0002",
+        "scene_id": "E001_S01",
+        "segment_type": "DIALOGUE",
+        "speaker": "LADY JULIANA",
+        "start_timestamp": "00:03.00",
+        "end_timestamp": "00:06.00",
+        "start_seconds": 3.0,
+        "end_seconds": 6.0,
+        "content": "\"Gerald is waiting for me.\""
+      },
+      {
+        "segment_id": "E001_S01_SEG0003",
+        "scene_id": "E001_S01",
+        "segment_type": "DIALOGUE",
+        "speaker": "MATRIARCH",
+        "start_timestamp": "00:06.00",
+        "end_timestamp": "00:09.50",
+        "start_seconds": 6.0,
+        "end_seconds": 9.5,
+        "content": "\"Not anymore. Turn around.\""
+      },
       {
         "segment_id": "E001_S01_SEG0004",
         "scene_id": "E001_S01",
@@ -208,42 +243,20 @@
         "start_seconds": 23.0,
         "end_seconds": 27.0,
         "content": "\"Then you will never have my name or my inheritance.\""
-      },
-      {
-        "segment_id": "E001_S01_SEG0009",
-        "scene_id": "E001_S01",
-        "segment_type": "DIALOGUE",
-        "speaker": "CLARISSA",
-        "start_timestamp": "00:27.00",
-        "end_timestamp": "00:31.00",
-        "start_seconds": 27.0,
-        "end_seconds": 31.0,
-        "content": "\"We already have both, sister.\""
-      },
-      {
-        "segment_id": "E001_S01_SEG0010",
-        "scene_id": "E001_S01",
-        "segment_type": "ACTION",
-        "speaker": null,
-        "start_timestamp": "00:31.00",
-        "end_timestamp": "00:35.00",
-        "start_seconds": 31.0,
-        "end_seconds": 35.0,
-        "content": "Clarissa lifts a stolen pendant from Juliana's throat."
       }
     ],
-    "hook_type": "question",
+    "hook_type": "conflict",
     "cliffhanger_type": "unresolved",
-    "why_it_works": "Opens on question dialogue/action: \"LADY JULIANA: What do you mean?\". The 46s cut lands on unresolved tension: \"Clarissa lifts a stolen pendant from Juliana's throat.\". The scene carries romance signals.",
+    "why_it_works": "Opens on a conflict hook (\"LADY JULIANA: Gerald is waiting for me.\") and cuts at 27s on unresolved tension.",
     "analysis_mode": "DETERMINISTIC_FALLBACK",
     "score_breakdown": {
-      "hook_strength": 7.1,
-      "emotional_impact": 4.3,
+      "hook_strength": 5.2,
+      "emotional_impact": 5.0,
       "suspense_curiosity": 5.15,
-      "cliffhanger_payoff": 4.0,
+      "cliffhanger_payoff": 5.6,
       "standalone_clarity": 7.9,
       "promotional_relevance": 8.25,
-      "final_score": 6.0
+      "final_score": 5.95
     },
     "validation_status": "PENDING",
     "validation_issues": [],
@@ -365,7 +378,7 @@
     ],
     "hook_type": "revelation",
     "cliffhanger_type": "question",
-    "why_it_works": "Opens on revelation dialogue/action: \"ELARA: My child is yours. That is the one truth you cannot rewrite.\". The 28s cut lands on question tension: \"DUKE ALEXANDER: Do you know what he wants?\". The scene carries betrayal, revelation signals.",
+    "why_it_works": "Opens on a revelation hook (\"ELARA: My child is yours. That is the one truth you cannot rewrite.\") and cuts at 28s on question tension.",
     "analysis_mode": "DETERMINISTIC_FALLBACK",
     "score_breakdown": {
       "hook_strength": 7.3,
@@ -382,195 +395,25 @@
     "rank_reason": ""
   },
   {
-    "promo_id": "E002_W0002",
-    "title": "Episode 2 — Revelation: DUKE ALEXANDER woman married",
-    "episode_number": 2,
-    "start_timestamp": "00:00.00",
-    "end_timestamp": "00:24.00",
-    "start_seconds": 0.0,
-    "end_seconds": 24.0,
-    "duration_seconds": 24.0,
-    "opening_hook": "DUKE ALEXANDER: You are not the woman I married.",
-    "main_dramatic_moment": "ELARA: My child is yours. That is the one truth you cannot rewrite.",
-    "ending_cliffhanger_or_payoff": "ELARA: My child is yours. That is the one truth you cannot rewrite.",
-    "promotional_justification": "Opens on revelation dialogue/action: \"DUKE ALEXANDER: You are not the woman I married.\". The 24s cut lands on unresolved tension: \"ELARA: My child is yours. That is the one truth you cannot rewrite.\". The scene carries revelation signals.",
-    "dialogue": [
-      "\"You are not the woman I married.\"",
-      "\"I am exactly the woman you married. You simply never asked.\"",
-      "\"Your name, your family, your child - all lies.\"",
-      "\"My child is yours. That is the one truth you cannot rewrite.\""
-    ],
-    "characters": [
-      "DUKE ALEXANDER",
-      "ELARA"
-    ],
-    "emotional_category": "Revelation",
-    "source_segment_ids": [
-      "E002_S01_SEG0001",
-      "E002_S01_SEG0002",
-      "E002_S01_SEG0003",
-      "E002_S01_SEG0004",
-      "E002_S01_SEG0005",
-      "E002_S01_SEG0006"
-    ],
-    "source_segments": [
-      {
-        "segment_id": "E002_S01_SEG0001",
-        "scene_id": "E002_S01",
-        "segment_type": "CAMERA",
-        "speaker": null,
-        "start_timestamp": "00:00.00",
-        "end_timestamp": "00:04.00",
-        "start_seconds": 0.0,
-        "end_seconds": 4.0,
-        "content": "A letter burns at the edge of a candle."
-      },
-      {
-        "segment_id": "E002_S01_SEG0002",
-        "scene_id": "E002_S01",
-        "segment_type": "DIALOGUE",
-        "speaker": "DUKE ALEXANDER",
-        "start_timestamp": "00:04.00",
-        "end_timestamp": "00:08.00",
-        "start_seconds": 4.0,
-        "end_seconds": 8.0,
-        "content": "\"You are not the woman I married.\""
-      },
-      {
-        "segment_id": "E002_S01_SEG0003",
-        "scene_id": "E002_S01",
-        "segment_type": "DIALOGUE",
-        "speaker": "ELARA",
-        "start_timestamp": "00:08.00",
-        "end_timestamp": "00:12.00",
-        "start_seconds": 8.0,
-        "end_seconds": 12.0,
-        "content": "\"I am exactly the woman you married. You simply never asked.\""
-      },
-      {
-        "segment_id": "E002_S01_SEG0004",
-        "scene_id": "E002_S01",
-        "segment_type": "DIALOGUE",
-        "speaker": "DUKE ALEXANDER",
-        "start_timestamp": "00:12.00",
-        "end_timestamp": "00:16.00",
-        "start_seconds": 12.0,
-        "end_seconds": 16.0,
-        "content": "\"Your name, your family, your child - all lies.\""
-      },
-      {
-        "segment_id": "E002_S01_SEG0005",
-        "scene_id": "E002_S01",
-        "segment_type": "DIALOGUE",
-        "speaker": "ELARA",
-        "start_timestamp": "00:16.00",
-        "end_timestamp": "00:20.00",
-        "start_seconds": 16.0,
-        "end_seconds": 20.0,
-        "content": "\"My child is yours. That is the one truth you cannot rewrite.\""
-      },
-      {
-        "segment_id": "E002_S01_SEG0006",
-        "scene_id": "E002_S01",
-        "segment_type": "ACTION",
-        "speaker": null,
-        "start_timestamp": "00:20.00",
-        "end_timestamp": "00:24.00",
-        "start_seconds": 20.0,
-        "end_seconds": 24.0,
-        "content": "He tears the letter in half and lets it fall."
-      }
-    ],
-    "hook_type": "revelation",
-    "cliffhanger_type": "unresolved",
-    "why_it_works": "Opens on revelation dialogue/action: \"DUKE ALEXANDER: You are not the woman I married.\". The 24s cut lands on unresolved tension: \"ELARA: My child is yours. That is the one truth you cannot rewrite.\". The scene carries revelation signals.",
-    "analysis_mode": "DETERMINISTIC_FALLBACK",
-    "score_breakdown": {
-      "hook_strength": 5.1,
-      "emotional_impact": 5.55,
-      "suspense_curiosity": 5.95,
-      "cliffhanger_payoff": 5.6,
-      "standalone_clarity": 4.7,
-      "promotional_relevance": 8.0,
-      "final_score": 5.62
-    },
-    "validation_status": "PENDING",
-    "validation_issues": [],
-    "human_review_label": null,
-    "rank_reason": ""
-  },
-  {
-    "promo_id": "E002_W0003",
-    "title": "Episode 2 — Drama: DUKE ALEXANDER know what",
-    "episode_number": 2,
-    "start_timestamp": "00:40.00",
-    "end_timestamp": "01:00.00",
-    "start_seconds": 40.0,
-    "end_seconds": 60.0,
-    "duration_seconds": 20.0,
-    "opening_hook": "DUKE ALEXANDER: Do you know what he wants?",
-    "main_dramatic_moment": "DUKE ALEXANDER: Do you know what he wants?",
-    "ending_cliffhanger_or_payoff": "DUKE ALEXANDER: Do you know what he wants?",
-    "promotional_justification": "Opens on question dialogue/action: \"DUKE ALEXANDER: Do you know what he wants?\". The 20s cut lands on question tension: \"DUKE ALEXANDER: Do you know what he wants?\".",
-    "dialogue": [
-      "\"Do you know what he wants?\""
-    ],
-    "characters": [
-      "DUKE ALEXANDER"
-    ],
-    "emotional_category": "Drama",
-    "source_segment_ids": [
-      "E002_S01_SEG0011"
-    ],
-    "source_segments": [
-      {
-        "segment_id": "E002_S01_SEG0011",
-        "scene_id": "E002_S01",
-        "segment_type": "DIALOGUE",
-        "speaker": "DUKE ALEXANDER",
-        "start_timestamp": "00:40.00",
-        "end_timestamp": "00:44.00",
-        "start_seconds": 40.0,
-        "end_seconds": 44.0,
-        "content": "\"Do you know what he wants?\""
-      }
-    ],
-    "hook_type": "question",
-    "cliffhanger_type": "question",
-    "why_it_works": "Opens on question dialogue/action: \"DUKE ALEXANDER: Do you know what he wants?\". The 20s cut lands on question tension: \"DUKE ALEXANDER: Do you know what he wants?\".",
-    "analysis_mode": "DETERMINISTIC_FALLBACK",
-    "score_breakdown": {
-      "hook_strength": 8.4,
-      "emotional_impact": 2.5,
-      "suspense_curiosity": 3.0,
-      "cliffhanger_payoff": 6.8,
-      "standalone_clarity": 5.8,
-      "promotional_relevance": 2.0,
-      "final_score": 5.36
-    },
-    "validation_status": "PENDING",
-    "validation_issues": [],
-    "human_review_label": null,
-    "rank_reason": ""
-  },
-  {
     "promo_id": "E003_W0001",
     "title": "Episode 3 — Drama: MRS HALE daughter will",
     "episode_number": 3,
-    "start_timestamp": "00:00.00",
-    "end_timestamp": "00:26.00",
-    "start_seconds": 0.0,
-    "end_seconds": 26.0,
-    "duration_seconds": 26.0,
+    "start_timestamp": "00:04.00",
+    "end_timestamp": "00:35.00",
+    "start_seconds": 4.0,
+    "end_seconds": 35.0,
+    "duration_seconds": 31.0,
     "opening_hook": "MRS. HALE: Your daughter will never see morning if you speak.",
     "main_dramatic_moment": "MRS. HALE: Your daughter will never see morning if you speak.",
-    "ending_cliffhanger_or_payoff": "MARY: Whose blood is that?",
-    "promotional_justification": "Opens on conflict dialogue/action: \"MRS. HALE: Your daughter will never see morning if you speak.\". The 26s cut lands on question tension: \"MARY: Whose blood is that?\".",
+    "ending_cliffhanger_or_payoff": "MARY: Then I will ask the right person.",
+    "promotional_justification": "Opens on conflict dialogue/action: \"MRS. HALE: Your daughter will never see morning if you speak.\". The 31s cut lands on unresolved tension: \"MARY: Then I will ask the right person.\".",
     "dialogue": [
       "\"Your daughter will never see morning if you speak.\"",
       "\"Please. She is only six.\"",
       "\"Then keep your mouth shut and carry the tray.\"",
-      "\"Whose blood is that?\""
+      "\"Whose blood is that?\"",
+      "\"The wrong person asked that question yesterday.\"",
+      "\"Then I will ask the right person.\""
     ],
     "characters": [
       "MARY",
@@ -578,25 +421,15 @@
     ],
     "emotional_category": "Drama",
     "source_segment_ids": [
-      "E003_S01_SEG0001",
       "E003_S01_SEG0002",
       "E003_S01_SEG0003",
       "E003_S01_SEG0004",
       "E003_S01_SEG0005",
-      "E003_S01_SEG0006"
+      "E003_S01_SEG0006",
+      "E003_S01_SEG0007",
+      "E003_S01_SEG0008"
     ],
     "source_segments": [
-      {
-        "segment_id": "E003_S01_SEG0001",
-        "scene_id": "E003_S01",
-        "segment_type": "CAMERA",
-        "speaker": null,
-        "start_timestamp": "00:00.00",
-        "end_timestamp": "00:04.00",
-        "start_seconds": 0.0,
-        "end_seconds": 4.0,
-        "content": "A hand pins a letter to a wooden door."
-      },
       {
         "segment_id": "E003_S01_SEG0002",
         "scene_id": "E003_S01",
@@ -651,78 +484,6 @@
         "start_seconds": 22.0,
         "end_seconds": 26.0,
         "content": "\"Whose blood is that?\""
-      }
-    ],
-    "hook_type": "conflict",
-    "cliffhanger_type": "question",
-    "why_it_works": "Opens on conflict dialogue/action: \"MRS. HALE: Your daughter will never see morning if you speak.\". The 26s cut lands on question tension: \"MARY: Whose blood is that?\".",
-    "analysis_mode": "DETERMINISTIC_FALLBACK",
-    "score_breakdown": {
-      "hook_strength": 7.3,
-      "emotional_impact": 6.2,
-      "suspense_curiosity": 4.65,
-      "cliffhanger_payoff": 6.8,
-      "standalone_clarity": 7.9,
-      "promotional_relevance": 8.25,
-      "final_score": 6.82
-    },
-    "validation_status": "PENDING",
-    "validation_issues": [],
-    "human_review_label": null,
-    "rank_reason": ""
-  },
-  {
-    "promo_id": "E003_W0002",
-    "title": "Episode 3 — Drama: MARY Whose blood that",
-    "episode_number": 3,
-    "start_timestamp": "00:17.00",
-    "end_timestamp": "00:40.00",
-    "start_seconds": 17.0,
-    "end_seconds": 40.0,
-    "duration_seconds": 23.0,
-    "opening_hook": "MARY: Whose blood is that?",
-    "main_dramatic_moment": "MRS. HALE: The wrong person asked that question yesterday.",
-    "ending_cliffhanger_or_payoff": "MARY: Then I will ask the right person.",
-    "promotional_justification": "Opens on question dialogue/action: \"MARY: Whose blood is that?\". The 23s cut lands on unresolved tension: \"MARY: Then I will ask the right person.\".",
-    "dialogue": [
-      "\"Whose blood is that?\"",
-      "\"The wrong person asked that question yesterday.\"",
-      "\"Then I will ask the right person.\""
-    ],
-    "characters": [
-      "MARY",
-      "MRS. HALE"
-    ],
-    "emotional_category": "Drama",
-    "source_segment_ids": [
-      "E003_S01_SEG0005",
-      "E003_S01_SEG0006",
-      "E003_S01_SEG0007",
-      "E003_S01_SEG0008",
-      "E003_S01_SEG0009"
-    ],
-    "source_segments": [
-      {
-        "segment_id": "E003_S01_SEG0005",
-        "scene_id": "E003_S01",
-        "segment_type": "ACTION",
-        "speaker": null,
-        "start_timestamp": "00:17.00",
-        "end_timestamp": "00:22.00",
-        "start_seconds": 17.0,
-        "end_seconds": 22.0,
-        "content": "Mary sees a bloodstained cuff under the tray cloth."
-      },
-      {
-        "segment_id": "E003_S01_SEG0006",
-        "scene_id": "E003_S01",
-        "segment_type": "DIALOGUE",
-        "speaker": "MARY",
-        "start_timestamp": "00:22.00",
-        "end_timestamp": "00:26.00",
-        "start_seconds": 22.0,
-        "end_seconds": 26.0,
-        "content": "\"Whose blood is that?\""
       },
       {
         "segment_id": "E003_S01_SEG0007",
@@ -745,81 +506,20 @@
         "start_seconds": 30.0,
         "end_seconds": 35.0,
         "content": "\"Then I will ask the right person.\""
-      },
-      {
-        "segment_id": "E003_S01_SEG0009",
-        "scene_id": "E003_S01",
-        "segment_type": "ACTION",
-        "speaker": null,
-        "start_timestamp": "00:35.00",
-        "end_timestamp": "00:40.00",
-        "start_seconds": 35.0,
-        "end_seconds": 40.0,
-        "content": "Mary hides the cuff in her apron and walks toward the main hall."
       }
     ],
-    "hook_type": "question",
+    "hook_type": "conflict",
     "cliffhanger_type": "unresolved",
-    "why_it_works": "Opens on question dialogue/action: \"MARY: Whose blood is that?\". The 23s cut lands on unresolved tension: \"MARY: Then I will ask the right person.\".",
+    "why_it_works": "Opens on a conflict hook (\"MRS. HALE: Your daughter will never see morning if you speak.\") and cuts at 31s on unresolved tension.",
     "analysis_mode": "DETERMINISTIC_FALLBACK",
     "score_breakdown": {
-      "hook_strength": 7.1,
-      "emotional_impact": 5.1,
-      "suspense_curiosity": 3.55,
+      "hook_strength": 7.3,
+      "emotional_impact": 6.2,
+      "suspense_curiosity": 5.0,
       "cliffhanger_payoff": 5.6,
-      "standalone_clarity": 7.3,
-      "promotional_relevance": 6.5,
-      "final_score": 5.94
-    },
-    "validation_status": "PENDING",
-    "validation_issues": [],
-    "human_review_label": null,
-    "rank_reason": ""
-  },
-  {
-    "promo_id": "E003_W0003",
-    "title": "Episode 3 — Drama: Mary hides cuff her",
-    "episode_number": 3,
-    "start_timestamp": "00:35.00",
-    "end_timestamp": "00:58.00",
-    "start_seconds": 35.0,
-    "end_seconds": 58.0,
-    "duration_seconds": 23.0,
-    "opening_hook": "Mary hides the cuff in her apron and walks toward the main hall.",
-    "main_dramatic_moment": "Mary hides the cuff in her apron and walks toward the main hall.",
-    "ending_cliffhanger_or_payoff": "Mary hides the cuff in her apron and walks toward the main hall.",
-    "promotional_justification": "Opens on action dialogue/action: \"Mary hides the cuff in her apron and walks toward the main hall.\". The 23s cut lands on reaction tension: \"Mary hides the cuff in her apron and walks toward the main hall.\".",
-    "dialogue": [],
-    "characters": [],
-    "emotional_category": "Drama",
-    "source_segment_ids": [
-      "E003_S01_SEG0009"
-    ],
-    "source_segments": [
-      {
-        "segment_id": "E003_S01_SEG0009",
-        "scene_id": "E003_S01",
-        "segment_type": "ACTION",
-        "speaker": null,
-        "start_timestamp": "00:35.00",
-        "end_timestamp": "00:40.00",
-        "start_seconds": 35.0,
-        "end_seconds": 40.0,
-        "content": "Mary hides the cuff in her apron and walks toward the main hall."
-      }
-    ],
-    "hook_type": "action",
-    "cliffhanger_type": "reaction",
-    "why_it_works": "Opens on action dialogue/action: \"Mary hides the cuff in her apron and walks toward the main hall.\". The 23s cut lands on reaction tension: \"Mary hides the cuff in her apron and walks toward the main hall.\".",
-    "analysis_mode": "DETERMINISTIC_FALLBACK",
-    "score_breakdown": {
-      "hook_strength": 4.6,
-      "emotional_impact": 2.5,
-      "suspense_curiosity": 2.5,
-      "cliffhanger_payoff": 2.5,
-      "standalone_clarity": 5.0,
-      "promotional_relevance": 3.0,
-      "final_score": 3.45
+      "standalone_clarity": 7.9,
+      "promotional_relevance": 8.25,
+      "final_score": 6.64
     },
     "validation_status": "PENDING",
     "validation_issues": [],
@@ -967,7 +667,7 @@
     ],
     "hook_type": "question",
     "cliffhanger_type": "question",
-    "why_it_works": "Opens on question dialogue/action: \"LADY CLARISSA: Debts? He owns half the county.\". The 40s cut lands on question tension: \"LADY CLARISSA: Will you sign?\".",
+    "why_it_works": "Opens on a question hook (\"LADY CLARISSA: Debts? He owns half the county.\") and cuts at 40s on question tension.",
     "analysis_mode": "DETERMINISTIC_FALLBACK",
     "score_breakdown": {
       "hook_strength": 7.1,
@@ -985,72 +685,6 @@
   },
   {
     "promo_id": "E005_W0001",
-    "title": "Episode 5 — Drama: MAID welcome",
-    "episode_number": 5,
-    "start_timestamp": "00:24.00",
-    "end_timestamp": "01:00.00",
-    "start_seconds": 24.0,
-    "end_seconds": 60.0,
-    "duration_seconds": 36.0,
-    "opening_hook": "MAID: You are welcome.",
-    "main_dramatic_moment": "They continue chopping vegetables.",
-    "ending_cliffhanger_or_payoff": "They continue chopping vegetables.",
-    "promotional_justification": "Opens on revelation dialogue/action: \"MAID: You are welcome.\". The 36s cut lands on reaction tension: \"They continue chopping vegetables.\".",
-    "dialogue": [
-      "\"You are welcome.\""
-    ],
-    "characters": [
-      "MAID"
-    ],
-    "emotional_category": "Drama",
-    "source_segment_ids": [
-      "E005_S01_SEG0009",
-      "E005_S01_SEG0010"
-    ],
-    "source_segments": [
-      {
-        "segment_id": "E005_S01_SEG0009",
-        "scene_id": "E005_S01",
-        "segment_type": "DIALOGUE",
-        "speaker": "MAID",
-        "start_timestamp": "00:24.00",
-        "end_timestamp": "00:27.00",
-        "start_seconds": 24.0,
-        "end_seconds": 27.0,
-        "content": "\"You are welcome.\""
-      },
-      {
-        "segment_id": "E005_S01_SEG0010",
-        "scene_id": "E005_S01",
-        "segment_type": "ACTION",
-        "speaker": null,
-        "start_timestamp": "00:27.00",
-        "end_timestamp": "00:30.00",
-        "start_seconds": 27.0,
-        "end_seconds": 30.0,
-        "content": "They continue chopping vegetables."
-      }
-    ],
-    "hook_type": "revelation",
-    "cliffhanger_type": "reaction",
-    "why_it_works": "Opens on revelation dialogue/action: \"MAID: You are welcome.\". The 36s cut lands on reaction tension: \"They continue chopping vegetables.\".",
-    "analysis_mode": "DETERMINISTIC_FALLBACK",
-    "score_breakdown": {
-      "hook_strength": 5.1,
-      "emotional_impact": 2.5,
-      "suspense_curiosity": 2.5,
-      "cliffhanger_payoff": 2.5,
-      "standalone_clarity": 4.3,
-      "promotional_relevance": 4.5,
-      "final_score": 3.62
-    },
-    "validation_status": "PENDING",
-    "validation_issues": [],
-    "human_review_label": null,
-    "rank_reason": ""
-  },
-  {
-    "promo_id": "E005_W0002",
     "title": "Episode 5 — Drama: COOK Grace",
     "episode_number": 5,
     "start_timestamp": "00:06.00",
@@ -1165,7 +799,7 @@
     ],
     "hook_type": "question",
     "cliffhanger_type": "revelation",
-    "why_it_works": "Opens on question dialogue/action: \"COOK: Your Grace?\". The 21s cut lands on revelation tension: \"MAID: You are welcome.\".",
+    "why_it_works": "Opens on a question hook (\"COOK: Your Grace?\") and cuts at 21s on revelation tension.",
     "analysis_mode": "DETERMINISTIC_FALLBACK",
     "score_breakdown": {
       "hook_strength": 1.4,
@@ -1309,7 +943,7 @@
     ],
     "hook_type": "question",
     "cliffhanger_type": "question",
-    "why_it_works": "Opens on question dialogue/action: \"GENERAL ROWAN: Where is my wife?\". The 40s cut lands on question tension: \"GENERAL ROWAN: Who ordered it?\". The scene carries romance signals.",
+    "why_it_works": "Opens on a question hook (\"GENERAL ROWAN: Where is my wife?\") and cuts at 40s on question tension.",
     "analysis_mode": "DETERMINISTIC_FALLBACK",
     "score_breakdown": {
       "hook_strength": 7.1,
@@ -1319,60 +953,6 @@
       "standalone_clarity": 7.9,
       "promotional_relevance": 8.0,
       "final_score": 6.37
-    },
-    "validation_status": "PENDING",
-    "validation_issues": [],
-    "human_review_label": null,
-    "rank_reason": ""
-  },
-  {
-    "promo_id": "E006_W0002",
-    "title": "Episode 6 — Drama: GENERAL ROWAN Who ordered",
-    "episode_number": 6,
-    "start_timestamp": "00:50.00",
-    "end_timestamp": "01:10.00",
-    "start_seconds": 50.0,
-    "end_seconds": 70.0,
-    "duration_seconds": 20.0,
-    "opening_hook": "GENERAL ROWAN: Who ordered it?",
-    "main_dramatic_moment": "GENERAL ROWAN: Who ordered it?",
-    "ending_cliffhanger_or_payoff": "GENERAL ROWAN: Who ordered it?",
-    "promotional_justification": "Opens on question dialogue/action: \"GENERAL ROWAN: Who ordered it?\". The 20s cut lands on question tension: \"GENERAL ROWAN: Who ordered it?\".",
-    "dialogue": [
-      "\"Who ordered it?\""
-    ],
-    "characters": [
-      "GENERAL ROWAN"
-    ],
-    "emotional_category": "Drama",
-    "source_segment_ids": [
-      "E006_S01_SEG0011"
-    ],
-    "source_segments": [
-      {
-        "segment_id": "E006_S01_SEG0011",
-        "scene_id": "E006_S01",
-        "segment_type": "DIALOGUE",
-        "speaker": "GENERAL ROWAN",
-        "start_timestamp": "00:50.00",
-        "end_timestamp": "00:54.00",
-        "start_seconds": 50.0,
-        "end_seconds": 54.0,
-        "content": "\"Who ordered it?\""
-      }
-    ],
-    "hook_type": "question",
-    "cliffhanger_type": "question",
-    "why_it_works": "Opens on question dialogue/action: \"GENERAL ROWAN: Who ordered it?\". The 20s cut lands on question tension: \"GENERAL ROWAN: Who ordered it?\".",
-    "analysis_mode": "DETERMINISTIC_FALLBACK",
-    "score_breakdown": {
-      "hook_strength": 7.1,
-      "emotional_impact": 2.5,
-      "suspense_curiosity": 3.55,
-      "cliffhanger_payoff": 6.8,
-      "standalone_clarity": 5.8,
-      "promotional_relevance": 3.25,
-      "final_score": 5.24
     },
     "validation_status": "PENDING",
     "validation_issues": [],
@@ -1483,7 +1063,7 @@
     ],
     "hook_type": "conflict",
     "cliffhanger_type": "question",
-    "why_it_works": "Opens on conflict dialogue/action: \"MOTHER: Your father made me promise. I should have told you years ago.\". The 30s cut lands on question tension: \"SON: How long have you known?\". The scene carries revelation signals.",
+    "why_it_works": "Opens on a conflict hook (\"MOTHER: Your father made me promise. I should have told you years ago.\") and cuts at 30s on question tension.",
     "analysis_mode": "DETERMINISTIC_FALLBACK",
     "score_breakdown": {
       "hook_strength": 6.6,
@@ -1656,7 +1236,7 @@
     ],
     "hook_type": "conflict",
     "cliffhanger_type": "unresolved",
-    "why_it_works": "Opens on conflict dialogue/action: \"LAWYER: The late duke left one condition for the inheritance.\". The 48s cut lands on unresolved tension: \"LADY JULIANA: Ask her who requested the copy.\". The scene carries revelation signals.",
+    "why_it_works": "Opens on a conflict hook (\"LAWYER: The late duke left one condition for the inheritance.\") and cuts at 48s on unresolved tension.",
     "analysis_mode": "DETERMINISTIC_FALLBACK",
     "score_breakdown": {
       "hook_strength": 6.6,
