@@ -2,6 +2,7 @@
 
 **Ayan Dhal** · Live prototype: https://kuku-promo-discovery-zeugck97grkgwwkmcvpany.streamlit.app/ · Static demo: `prototype/index.html` · Review UI: `app.py`
 **Run:** 50 episodes → 3,727 segments → 184 ranked candidates · **Cost:** $0, no LLM calls
+**Walkthrough video (3 min):** https://drive.google.com/file/d/1cZsJbuWEF_RlNclWwfSOxXoiaEHVcKm9/view?usp=drivesdk
 
 ## 1. Why this problem, and how I framed it
 
