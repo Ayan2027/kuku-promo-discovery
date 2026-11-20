@@ -1,6 +1,6 @@
 # Kuku AI Generalist — Problem 1: Find the Promos
 
-**Ayan Dhal** · Prototype: `prototype/index.html` (self-contained) · Review UI: `app.py`
+**Ayan Dhal** · Live prototype: https://kuku-promo-discovery-zeugck97grkgwwkmcvpany.streamlit.app/ · Static demo: `prototype/index.html` · Review UI: `app.py`
 **Run:** 50 episodes → 3,727 segments → 184 ranked candidates · **Cost:** $0, no LLM calls
 
 ## 1. Why this problem, and how I framed it

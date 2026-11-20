@@ -42,6 +42,11 @@ def inline(text: str) -> str:
         r'<font name="Courier" size="8.5">\1</font>',
         text,
     )
+    text = re.sub(
+        r"(https?://[^\s<]+)",
+        r'<link href="\1">\1</link>',
+        text,
+    )
     return text
 
 
