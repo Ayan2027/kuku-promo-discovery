@@ -1,0 +1,13 @@
+.git
+.venv
+__pycache__
+*.pyc
+data/input
+data/processed
+data/cache
+data/exports
+raw_outputs
+docs
+tests
+prototype
+*.pdf

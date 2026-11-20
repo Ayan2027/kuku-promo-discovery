@@ -36,6 +36,12 @@ class Settings:
         os.getenv("PROMO_MAX_DURATION", "60")
     )
 
+    # Quality thresholds used for machine labels and for the optional
+    # pre-ranking filter in the window generator.
+    PROMO_MIN_SCORE = float(os.getenv("PROMO_MIN_SCORE", "0"))
+    PROMO_GOOD_SCORE = float(os.getenv("PROMO_GOOD_SCORE", "6.5"))
+    PROMO_WEAK_SCORE = float(os.getenv("PROMO_WEAK_SCORE", "4.5"))
+
     @classmethod
     def validate(cls):
         if cls.PROMO_MIN_DURATION <= 0:

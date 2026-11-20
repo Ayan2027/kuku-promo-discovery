@@ -14,3 +14,14 @@ data/exports/*
 !data/processed/.gitkeep
 !data/cache/.gitkeep
 !data/exports/.gitkeep
+
+# Demo cache is reproducible; demo outputs and the static prototype are kept.
+demo/cache/
+demo/input/*.txt
+*.tmp
+
+# Real-pack outputs contain screenplay excerpts. Include them in the
+# submission zip, but do not publish them in a public repository.
+raw_outputs/*
+!raw_outputs/README.md
+submission/

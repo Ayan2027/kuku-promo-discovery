@@ -91,6 +91,20 @@ class PromoScoreBreakdown(BaseModel):
     final_score: float = Field(ge=0, le=10)
 
 
+class SourceSegment(BaseModel):
+    """A source screenplay segment included in a promo, with exact timing."""
+
+    segment_id: str
+    scene_id: Optional[str] = None
+    segment_type: str
+    speaker: Optional[str] = None
+    start_timestamp: str
+    end_timestamp: str
+    start_seconds: float = Field(ge=0)
+    end_seconds: float = Field(ge=0)
+    content: str
+
+
 class PromoCandidate(BaseModel):
     promo_id: str
     title: str
@@ -107,14 +121,24 @@ class PromoCandidate(BaseModel):
     opening_hook: str
     main_dramatic_moment: str
     ending_cliffhanger_or_payoff: str
+    promotional_justification: str
 
     dialogue: list[str] = Field(default_factory=list)
     characters: list[str] = Field(default_factory=list)
 
     emotional_category: str
-    promotional_justification: str
 
     source_segment_ids: list[str] = Field(default_factory=list)
+
+    # Complete ordered source segments, so the export is self-contained.
+    source_segments: list[SourceSegment] = Field(default_factory=list)
+
+    # Human-readable explanation of the editorial choice.
+    hook_type: str = "unknown"
+    cliffhanger_type: str = "unknown"
+    why_it_works: str = ""
+
+    analysis_mode: str = "DETERMINISTIC_FALLBACK"
 
     score_breakdown: Optional[PromoScoreBreakdown] = None
 
@@ -122,6 +146,7 @@ class PromoCandidate(BaseModel):
     validation_issues: list[str] = Field(default_factory=list)
 
     human_review_label: Optional[str] = None
+    rank_reason: str = ""
 
 
 class DatasetSummary(BaseModel):

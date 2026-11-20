@@ -1,0 +1,83 @@
+{
+  "total_candidates": 15,
+  "duplicates_removed": 0,
+  "validation_status_counts": {
+    "VALID": 15
+  },
+  "human_review_label_counts": {
+    "Good Promo": 2,
+    "Weak Promo": 10,
+    "Bad Promo": 3
+  },
+  "average_heuristic_score": 5.57,
+  "highest_score": 6.88,
+  "lowest_score": 3.35,
+  "scoring_method": "Deterministic screenplay-text heuristics",
+  "score_weights": {
+    "hook_strength": 0.25,
+    "emotional_impact": 0.15,
+    "suspense_curiosity": 0.15,
+    "cliffhanger_payoff": 0.2,
+    "standalone_clarity": 0.15,
+    "promotional_relevance": 0.1
+  },
+  "recommended_first": [
+    {
+      "rank": 1,
+      "promo_id": "E002_W0001",
+      "episode_number": 2,
+      "score": 6.88,
+      "reason": "Rank 1: 6.88/10 (Good Promo), scored by heuristic. Opens with a revelation hook and ends on question tension.",
+      "start": "00:16.00",
+      "end": "00:44.00"
+    },
+    {
+      "rank": 2,
+      "promo_id": "E003_W0001",
+      "episode_number": 3,
+      "score": 6.82,
+      "reason": "Rank 2: 6.82/10 (Good Promo), scored by heuristic. Opens with a conflict hook and ends on question tension.",
+      "start": "00:00.00",
+      "end": "00:26.00"
+    },
+    {
+      "rank": 3,
+      "promo_id": "E007_W0001",
+      "episode_number": 7,
+      "score": 6.46,
+      "reason": "Rank 3: 6.46/10 (Weak Promo), scored by heuristic. Opens with a conflict hook and ends on question tension.",
+      "start": "00:13.00",
+      "end": "00:43.00"
+    },
+    {
+      "rank": 4,
+      "promo_id": "E006_W0001",
+      "episode_number": 6,
+      "score": 6.37,
+      "reason": "Rank 4: 6.37/10 (Weak Promo), scored by heuristic. Opens with a question hook and ends on question tension.",
+      "start": "00:14.00",
+      "end": "00:54.00"
+    },
+    {
+      "rank": 5,
+      "promo_id": "E004_W0001",
+      "episode_number": 4,
+      "score": 6.31,
+      "reason": "Rank 5: 6.31/10 (Weak Promo), scored by heuristic. Opens with a question hook and ends on question tension.",
+      "start": "00:12.00",
+      "end": "00:52.00"
+    }
+  ],
+  "quality_check": {
+    "clips_ending_mid_dialogue": 0,
+    "clips_crossing_scene_boundaries": 0,
+    "hooks_two_words_or_less": 0,
+    "closure_endings": 0,
+    "duration_distinct_values": 12
+  },
+  "note": "Scores are heuristic ranking signals, not measured promo quality or human-validated accuracy. All candidates require human review before final selection.",
+  "json_export": "demo\\exports\\ranked_promos.json",
+  "csv_export": "demo\\exports\\ranked_promos.csv",
+  "rejected_export": "demo\\exports\\rejected_candidates.json",
+  "quality_check_export": "demo\\exports\\quality_check.json"
+}

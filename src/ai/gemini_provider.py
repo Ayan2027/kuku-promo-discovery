@@ -121,6 +121,7 @@ class GeminiProvider:
     def status(self):
         return {
             "enabled": self.enabled,
+            "provider": "gemini",
             "requests_used": self.requests_used,
             "max_requests": self.max_requests,
             "remaining_requests": max(

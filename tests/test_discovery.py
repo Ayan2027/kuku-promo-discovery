@@ -138,6 +138,51 @@ def test_fallback_evaluation():
     assert result["dialogue"]
 
 
+def test_windows_end_on_a_source_boundary():
+    episode = make_test_episode()
+    windows = generate_candidate_windows(episode)
+
+    boundaries = {
+        round(float(segment.end_seconds), 2)
+        for segment in episode.segments
+    }
+    boundaries |= {
+        round(float(scene.end_seconds), 2) for scene in episode.scenes
+    }
+
+    for window in windows:
+        assert round(window["end_seconds"], 2) in boundaries
+
+
+def test_promo_id_has_a_single_episode_prefix():
+    episode = make_test_episode()
+    window = generate_candidate_windows(episode)[0]
+    candidate, _ = create_candidate(
+        episode,
+        window,
+        fallback_evaluation(window),
+        "DETERMINISTIC_FALLBACK",
+    )
+
+    assert candidate.promo_id.startswith("E001_W")
+    assert not candidate.promo_id.startswith("E001_E001")
+
+
+def test_candidate_embeds_ordered_source_segments():
+    episode = make_test_episode()
+    window = generate_candidate_windows(episode)[0]
+    candidate, _ = create_candidate(
+        episode,
+        window,
+        fallback_evaluation(window),
+        "DETERMINISTIC_FALLBACK",
+    )
+
+    starts = [segment.start_seconds for segment in candidate.source_segments]
+    assert starts == sorted(starts)
+    assert candidate.source_segments
+
+
 def test_candidate_uses_python_timestamps():
 
     episode = make_test_episode()

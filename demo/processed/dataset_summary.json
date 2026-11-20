@@ -1,0 +1,14 @@
+{
+  "total_episodes": 8,
+  "processed_episodes": 8,
+  "failed_episodes": 0,
+  "total_scenes": 9,
+  "total_segments": 92,
+  "dialogue_segments": 70,
+  "camera_segments": 7,
+  "action_segments": 15,
+  "sound_segments": 0,
+  "missing_timestamps": 0,
+  "invalid_timestamps": 0,
+  "parsing_errors": []
+}

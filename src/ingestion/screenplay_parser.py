@@ -121,9 +121,16 @@ def extract_single(pattern, text, default=""):
 
 def clean_content(content: str) -> str:
     """
-    Remove surrounding whitespace while preserving
-    the original internal screenplay content.
+    Remove surrounding whitespace and script section markers while
+    preserving the original internal screenplay content.
     """
+
+    content = re.sub(
+        r"-{2,}\s*SCRIPT\s+(?:START|END)\s*-{2,}",
+        "",
+        content,
+        flags=re.IGNORECASE,
+    )
 
     return content.strip()
 

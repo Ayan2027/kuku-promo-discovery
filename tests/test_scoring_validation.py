@@ -123,15 +123,15 @@ def test_duplicate_candidates_are_flagged_not_deleted():
     assert second["human_review_label"] == "Repetitive Promo"
 
 
-def test_ranking_prioritizes_episode_diversity():
-    from src.discovery.ranker import _diversified_order
+def test_ranking_is_global_score_order():
+    from src.discovery.ranker import _global_order
 
     candidates = [
         {
             "promo_id": "E1_HIGH",
             "episode_number": 1,
             "validation_status": "VALID",
-            "human_review_label": "Weak Promo",
+            "human_review_label": "Good Promo",
             "score_breakdown": {"final_score": 9},
             "start_seconds": 10,
         },
@@ -139,7 +139,7 @@ def test_ranking_prioritizes_episode_diversity():
             "promo_id": "E1_LOW",
             "episode_number": 1,
             "validation_status": "VALID",
-            "human_review_label": "Repetitive Promo",
+            "human_review_label": "Weak Promo",
             "score_breakdown": {"final_score": 8},
             "start_seconds": 12,
         },
@@ -147,15 +147,32 @@ def test_ranking_prioritizes_episode_diversity():
             "promo_id": "E2_HIGH",
             "episode_number": 2,
             "validation_status": "VALID",
-            "human_review_label": "Weak Promo",
+            "human_review_label": "Good Promo",
             "score_breakdown": {"final_score": 7},
             "start_seconds": 20,
         },
     ]
 
-    ranked = _diversified_order(candidates)
+    ranked = _global_order(candidates)
 
-    assert ranked[0]["promo_id"] == "E1_HIGH"
-    assert ranked[1]["promo_id"] == "E2_HIGH"
-    assert ranked[2]["promo_id"] == "E1_LOW"
+    assert [c["promo_id"] for c in ranked] == [
+        "E1_HIGH", "E1_LOW", "E2_HIGH"
+    ]
+
+
+def test_duplicate_candidates_are_removed_from_ranked_list():
+    from src.discovery.deduplicator import deduplicate_candidates
+
+    first = make_candidate()
+    second = make_candidate()
+    second["promo_id"] = "P2"
+    first["score_breakdown"] = {"final_score": 8}
+    second["score_breakdown"] = {"final_score": 6}
+
+    kept, dropped = deduplicate_candidates([first, second])
+
+    assert len(kept) == 1
+    assert len(dropped) == 1
+    assert dropped[0]["promo_id"] == "P2"
+    assert dropped[0]["duplicate_of"] == "P1"
 

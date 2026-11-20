@@ -1,0 +1,82 @@
+{
+  "total_candidates": 15,
+  "label_counts": {
+    "Good Promo": 2,
+    "Weak Promo": 10,
+    "Bad Promo": 3
+  },
+  "score_min": 3.35,
+  "score_max": 6.88,
+  "score_mean": 5.57,
+  "duration_min": 20.0,
+  "duration_max": 48.0,
+  "duration_distinct_values": 12,
+  "episodes_covered": 8,
+  "clips_ending_mid_dialogue": 0,
+  "clips_crossing_scene_boundaries": 0,
+  "hooks_two_words_or_less": 0,
+  "closure_endings": 0,
+  "duplicates_removed": 0,
+  "scoring_sources": {
+    "GEMINI": 0,
+    "HEURISTIC": 15
+  },
+  "bad_pick_examples": [
+    {
+      "rank": 15,
+      "promo_id": "E005_W0002",
+      "episode_number": 5,
+      "score": 3.35,
+      "label": "Bad Promo",
+      "opening_hook": "COOK: Your Grace?",
+      "ending": "MAID: You are welcome.",
+      "why_it_fails": "Hook scored 1.4/10 and ending scored 4.1/10. Ends mid-dialogue: False. Crosses 1 scene(s).",
+      "validation_issues": []
+    },
+    {
+      "rank": 14,
+      "promo_id": "E003_W0003",
+      "episode_number": 3,
+      "score": 3.45,
+      "label": "Bad Promo",
+      "opening_hook": "Mary hides the cuff in her apron and walks toward the main hall.",
+      "ending": "Mary hides the cuff in her apron and walks toward the main hall.",
+      "why_it_fails": "Hook scored 4.6/10 and ending scored 2.5/10. Ends mid-dialogue: False. Crosses 1 scene(s).",
+      "validation_issues": []
+    },
+    {
+      "rank": 13,
+      "promo_id": "E005_W0001",
+      "episode_number": 5,
+      "score": 3.62,
+      "label": "Bad Promo",
+      "opening_hook": "MAID: You are welcome.",
+      "ending": "They continue chopping vegetables.",
+      "why_it_fails": "Hook scored 5.1/10 and ending scored 2.5/10. Ends mid-dialogue: False. Crosses 1 scene(s).",
+      "validation_issues": []
+    },
+    {
+      "rank": 12,
+      "promo_id": "E006_W0002",
+      "episode_number": 6,
+      "score": 5.24,
+      "label": "Weak Promo",
+      "opening_hook": "GENERAL ROWAN: Who ordered it?",
+      "ending": "GENERAL ROWAN: Who ordered it?",
+      "why_it_fails": "Hook scored 7.1/10 and ending scored 6.8/10. Ends mid-dialogue: False. Crosses 1 scene(s).",
+      "validation_issues": []
+    },
+    {
+      "rank": 11,
+      "promo_id": "E002_W0003",
+      "episode_number": 2,
+      "score": 5.36,
+      "label": "Weak Promo",
+      "opening_hook": "DUKE ALEXANDER: Do you know what he wants?",
+      "ending": "DUKE ALEXANDER: Do you know what he wants?",
+      "why_it_fails": "Hook scored 8.4/10 and ending scored 6.8/10. Ends mid-dialogue: False. Crosses 1 scene(s).",
+      "validation_issues": []
+    }
+  ],
+  "note": "Scores are deterministic screenplay-text heuristics, not measured promotional performance. 'Good Promo' means the clip cleared the internal quality thresholds; it is not a guarantee."
+}
