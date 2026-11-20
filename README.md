@@ -186,7 +186,7 @@ python -m http.server 8000
 # http://localhost:8000/prototype/
 ```
 
-A public URL requires the submitter's own hosting account; the repository includes everything needed for that deployment.
+A public URL requires the submitter's own hosting account; the repository includes everything needed for that deployment. See [`docs/DEPLOY.md`](docs/DEPLOY.md) for GitHub Pages, Streamlit Cloud and Docker steps.
 
 ---
 
